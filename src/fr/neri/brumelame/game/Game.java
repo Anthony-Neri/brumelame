@@ -20,11 +20,6 @@ import java.util.Objects;
 public class Game {
 
     /**
-     * Dernière case à atteindre pour terminer la partie.
-     */
-    private final int FINAL_CELL = 4;
-
-    /**
      * Interface console de dialogue avec le joueur.
      */
     private Menu menu;
@@ -39,7 +34,7 @@ public class Game {
 
     private int playerPosition = 0;
 
-    private List<Cell> board;
+    private Board board;
 
     /**
      * Initialise une nouvelle partie avec un menu et un dé standard (1 à 6).
@@ -47,7 +42,7 @@ public class Game {
     public Game() {
         this.menu = new Menu();
         this.dice = new Dice(1, 1);
-        this.board = new ArrayList<Cell>();
+        this.board = new Board();
     }
 
     /**
@@ -150,10 +145,9 @@ public class Game {
      * </p>
      */
     public void play() {
-        createBoard();
 
-        while (playerPosition < FINAL_CELL){
-            menu.printCell(board.get(playerPosition));
+        while (playerPosition < board.getFinalCell()){
+            menu.printCell(board.getCell(playerPosition));
 
             int choice = menu.askAction(playerPosition);
             switch (choice) {
@@ -177,13 +171,6 @@ public class Game {
         playerPosition += diceResult;
 
 
-    }
-
-    private void createBoard(){
-        board.add(new EmptyCell());
-        board.add(new Ennemy());
-        board.add(new Weapon());
-        board.add(new Bonus());
     }
 
 
