@@ -1,6 +1,6 @@
 package fr.neri.brumelame.game.cell;
 
-public class Ennemy extends Cell {
+public class Enemy extends Cell {
 
     @Override
     public String toString() {

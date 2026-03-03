@@ -16,8 +16,8 @@ public class Board {
 
     private void initializeCells() {
         cells.add(new EmptyCell());
-        cells.add(new Ennemy());
-        cells.add(new Weapon());
+        cells.add(new Enemy());
+        cells.add(new WeaponCell());
         cells.add(new Bonus());
     }
 
