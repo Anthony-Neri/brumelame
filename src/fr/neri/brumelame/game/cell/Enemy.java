@@ -1,9 +1,10 @@
 package fr.neri.brumelame.game.cell;
 
-public class Enemy extends Cell {
+public class Enemy implements Cell {
+
 
     @Override
-    public String toString() {
-        return "C'est un ennemi";
+    public String getDescription() {
+        return "C'est un ennemi !";
     }
 }

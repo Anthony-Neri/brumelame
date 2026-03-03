@@ -69,7 +69,7 @@ public class Menu {
 
     public void printCell(Cell cell){
         System.out.println();
-        System.out.println(cell.toString());
+        System.out.println(cell.getDescription());
 
     }
 

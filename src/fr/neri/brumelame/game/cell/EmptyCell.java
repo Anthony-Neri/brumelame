@@ -1,8 +1,9 @@
 package fr.neri.brumelame.game.cell;
 
-public class EmptyCell extends Cell {
+public class EmptyCell implements Cell {
+
     @Override
-    public String toString() {
-        return "C'est une case vide";
+    public String getDescription() {
+        return "C'est une case vide !";
     }
 }

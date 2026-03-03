@@ -1,8 +1,9 @@
 package fr.neri.brumelame.game.cell;
 
-public class WeaponCell extends Cell{
+public class WeaponCell implements Cell{
+
     @Override
-    public String toString() {
+    public String getDescription() {
         return "C'est une arme";
     }
 }
