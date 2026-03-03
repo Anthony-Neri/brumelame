@@ -35,15 +35,15 @@ public abstract class Character {
      * @param name nom du personnage
      * @param health points de vie
      * @param attack valeur d'attaque
-     * @param equipement équipement offensif initial
+     * @param equipment équipement offensif initial
      */
-    public Character(String type, String name, int health, int attack, OffensiveEquipment equipement) {
+    public Character(String type, String name, int health, int attack, OffensiveEquipment equipment) {
         this.type = type;
         this.name = name;
         this.health = health;
         this.attack = attack;
-        this.equipement = equipement;
-        this.defEquipement = null;
+        this.equipment = equipment;
+        this.defEquipment = null;
     }
 
     /**
@@ -78,8 +78,8 @@ public abstract class Character {
      *
      * @return équipement offensif
      */
-    public OffensiveEquipment getEquipement() {
-        return equipement;
+    public OffensiveEquipment getequipment() {
+        return equipment;
     }
 
     /**
@@ -112,10 +112,10 @@ public abstract class Character {
     /**
      * Modifie l'équipement offensif du personnage.
      *
-     * @param equipement nouvel équipement offensif
+     * @param equipment nouvel équipement offensif
      */
-    public void setEquipement(OffensiveEquipment equipement) {
-        this.equipement = equipement;
+    public void setequipment(OffensiveEquipment equipment) {
+        this.equipment = equipment;
     }
 
     /**
@@ -128,7 +128,7 @@ public abstract class Character {
                 " | Classe : " + this.type +
                 " | Points de vie : " + this.health +
                 " | Attaque : " + this.attack +
-                " | Équipement : " + this.equipement;
+                " | Équipement : " + this.equipment;
     }
 
 }
