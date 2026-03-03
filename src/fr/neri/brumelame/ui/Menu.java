@@ -1,6 +1,7 @@
 package fr.neri.brumelame.ui;
 
 import fr.neri.brumelame.domain.character.Character;
+import fr.neri.brumelame.game.cell.Cell;
 
 import java.util.Scanner;
 
@@ -61,9 +62,17 @@ public class Menu {
         System.out.println("1. Avancer");
         return askInt("Choix",1,1);
     }
+
     public void printCharacter(Character character){
         System.out.println(character);
     }
+
+    public void printCell(Cell cell){
+        System.out.println();
+        System.out.println(cell.toString());
+
+    }
+
     public void end(){
         System.out.println();
         System.out.println("Vous êtes arrivé à la fin, Bravo !.");

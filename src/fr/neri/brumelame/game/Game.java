@@ -3,8 +3,11 @@ package fr.neri.brumelame.game;
 import fr.neri.brumelame.domain.character.Character;
 import fr.neri.brumelame.domain.character.Warrior;
 import fr.neri.brumelame.domain.character.Wizard;
+import fr.neri.brumelame.game.cell.*;
 import fr.neri.brumelame.ui.Menu;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -19,7 +22,7 @@ public class Game {
     /**
      * Dernière case à atteindre pour terminer la partie.
      */
-    private final int FINAL_CELL = 64;
+    private final int FINAL_CELL = 4;
 
     /**
      * Interface console de dialogue avec le joueur.
@@ -34,14 +37,17 @@ public class Game {
      */
     private Dice dice;
 
-    private int playerPosition = 1;
+    private int playerPosition = 0;
+
+    private List<Cell> Cells;
 
     /**
      * Initialise une nouvelle partie avec un menu et un dé standard (1 à 6).
      */
     public Game() {
         this.menu = new Menu();
-        this.dice = new Dice(1, 6);
+        this.dice = new Dice(1, 1);
+        this.Cells = new ArrayList<Cell>();
     }
 
     /**
@@ -144,13 +150,19 @@ public class Game {
      * </p>
      */
     public void play() {
+        createBoard();
 
-        while (playerPosition < FINAL_CELL) {
+        while (playerPosition < FINAL_CELL){
+            menu.printCell(Cells.get(playerPosition));
+
             int choice = menu.askAction(playerPosition);
             switch (choice) {
                 case 1 -> moveCharacter();
             }
-        }
+
+
+        };
+
         menu.end();
 
 
@@ -165,6 +177,13 @@ public class Game {
         playerPosition += diceResult;
 
 
+    }
+
+    private void createBoard(){
+        Cells.add(new Empty());
+        Cells.add(new Ennemy());
+        Cells.add(new Weapon());
+        Cells.add(new Bonus());
     }
 
 
