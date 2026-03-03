@@ -10,18 +10,27 @@ src/
 │   ├── app/
 │   │   └── Main.java
 │   ├── domain/
-│   │   ├── Character.java
-│   │   ├── DefensiveEquipement.java
-│   │   ├── OffensiveEquipement.java
-│   │   ├── Potion.java
-│   │   ├── Shield.java
-│   │   ├── Spell.java
-│   │   ├── Warrior.java
-│   │   ├── Weapon.java
-│   │   └── Wizard.java
+│   │   ├── character/
+│   │   │   ├── Character.java
+│   │   │   ├── Warrior.java
+│   │   │   └── Wizard.java
+│   │   └── equipment/
+│   │       ├── DefensiveEquipment.java
+│   │       ├── OffensiveEquipment.java
+│   │       ├── Potion.java
+│   │       ├── Shield.java
+│   │       ├── Spell.java
+│   │       └── Weapon.java
 │   ├── game/
+│   │   ├── Board.java
 │   │   ├── Dice.java
-│   │   └── Game.java
+│   │   ├── Game.java
+│   │   └── cell/
+│   │       ├── Bonus.java
+│   │       ├── Cell.java
+│   │       ├── EmptyCell.java
+│   │       ├── Enemy.java
+│   │       └── WeaponCell.java
 │   └── ui/
 │       └── Menu.java
 ```
@@ -40,6 +49,7 @@ classDiagram
         -menu: Menu
         -character: Character
         -dice: Dice
+        -board: Board
         +Game()
         +home() void
         +startGame() void
@@ -50,24 +60,53 @@ classDiagram
         -moveCharacter() void
     }
 
+    class Board {
+        -cells: Cell[]
+        +Board()
+        +getCell(int index) Cell
+    }
+
+    class Cell {
+        <<abstract>>
+        -name: String
+        +Cell(String name)
+        +getName() String
+    }
+
+    class EmptyCell {
+        +EmptyCell()
+    }
+
+    class Bonus {
+        +Bonus()
+    }
+
+    class Enemy {
+        +Enemy()
+    }
+
+    class WeaponCell {
+        +WeaponCell()
+    }
+
     class Character {
         <<abstract>>
         -type: String
         -name: String
         -health: int
         -attack: int
-        -equipement: OffensiveEquipement
+        -equipement: OffensiveEquipment
         -cell: int
-        +Character(String type, String name, int health, int attack, OffensiveEquipement equipement)
+        +Character(String type, String name, int health, int attack, OffensiveEquipment equipement)
         +getName() String
         +getHealth() int
         +getAttack() int
-        +getEquipement() OffensiveEquipement
+        +getEquipement() OffensiveEquipment
         +getCell() int
         +setName(String name) void
         +setHealth(int health) void
         +setAttack(int attack) void
-        +setEquipement(OffensiveEquipement equipement) void
+        +setEquipement(OffensiveEquipment equipement) void
         +setCell(int cell) void
         +toString() String
     }
@@ -80,12 +119,12 @@ classDiagram
         +Wizard(String name)
     }
 
-    class OffensiveEquipement {
+    class OffensiveEquipment {
         <<abstract>>
         -type: String
         -name: String
         -bonusAttack: int
-        +OffensiveEquipement(String name, String type, int attack)
+        +OffensiveEquipment(String name, String type, int attack)
         +getName() String
         +getType() String
         +getBonusAttack() int
@@ -100,12 +139,12 @@ classDiagram
         +Spell(String name, String type, int bonusAttack)
     }
 
-    class DefensiveEquipement {
+    class DefensiveEquipment {
         <<abstract>>
         -type: String
         -name: String
         -bonus: int
-        +DefensiveEquipement(String name, String type, int defense)
+        +DefensiveEquipment(String name, String type, int defense)
         +getName() String
         +getType() String
         +getBonus() int
@@ -147,13 +186,19 @@ classDiagram
     Game --> Menu : has
     Game --> Character : has
     Game --> Dice : has
+    Game --> Board : has
+    Board --> Cell : contains
+    Cell <|-- EmptyCell : extends
+    Cell <|-- Bonus : extends
+    Cell <|-- Enemy : extends
+    Cell <|-- WeaponCell : extends
     Character <|-- Warrior : extends
     Character <|-- Wizard : extends
-    Character --> OffensiveEquipement : has
-    OffensiveEquipement <|-- Weapon : extends
-    OffensiveEquipement <|-- Spell : extends
-    DefensiveEquipement <|-- Shield : extends
-    DefensiveEquipement <|-- Potion : extends
+    Character --> OffensiveEquipment : has
+    OffensiveEquipment <|-- Weapon : extends
+    OffensiveEquipment <|-- Spell : extends
+    DefensiveEquipment <|-- Shield : extends
+    DefensiveEquipment <|-- Potion : extends
     Warrior ..> Weapon : creates
     Wizard ..> Spell : creates
 ```
@@ -166,12 +211,37 @@ classDiagram
    - Créer un personnage (Sorcier ou Guerrier)
    - Nommer votre personnage
    - Commencer le jeu et avancer sur le plateau (64 cases)
+   - Rencontrer des cases spéciales : bonus, ennemis, armes...
 
 ## Classes principales
 
+### Application
+- [`Main`](src/fr/neri/brumelame/app/Main.java) : Point d'entrée de l'application
+
+### Personnages (`domain/character`)
+- [`Character`](src/fr/neri/brumelame/domain/character/Character.java) : Classe abstraite pour les personnages
+- [`Warrior`](src/fr/neri/brumelame/domain/character/Warrior.java) : Classe guerrier (10 PV, 5 ATK)
+- [`Wizard`](src/fr/neri/brumelame/domain/character/Wizard.java) : Classe sorcier (6 PV, 8 ATK)
+
+### Équipements (`domain/equipment`)
+- [`OffensiveEquipment`](src/fr/neri/brumelame/domain/equipment/OffensiveEquipment.java) : Classe abstraite pour les équipements offensifs
+- [`Weapon`](src/fr/neri/brumelame/domain/equipment/Weapon.java) : Arme pour les guerriers
+- [`Spell`](src/fr/neri/brumelame/domain/equipment/Spell.java) : Sort pour les sorciers
+- [`DefensiveEquipment`](src/fr/neri/brumelame/domain/equipment/DefensiveEquipment.java) : Classe abstraite pour les équipements défensifs
+- [`Shield`](src/fr/neri/brumelame/domain/equipment/Shield.java) : Bouclier
+- [`Potion`](src/fr/neri/brumelame/domain/equipment/Potion.java) : Potion de soin
+
+### Jeu (`game`)
 - [`Game`](src/fr/neri/brumelame/game/Game.java) : Gère la logique du jeu
-- [`Character`](src/fr/neri/brumelame/domain/Character.java) : Classe abstraite pour les personnages
-- [`Warrior`](src/fr/neri/brumelame/domain/Warrior.java) : Classe guerrier (10 PV, 5 ATK)
-- [`Wizard`](src/fr/neri/brumelame/domain/Wizard.java) : Classe sorcier (6 PV, 8 ATK)
-- [`Menu`](src/fr/neri/brumelame/ui/Menu.java) : Gère l'interface utilisateur
+- [`Board`](src/fr/neri/brumelame/game/Board.java) : Représente le plateau de jeu
 - [`Dice`](src/fr/neri/brumelame/game/Dice.java) : Simule un dé pour le déplacement
+
+### Cases (`game/cell`)
+- [`Cell`](src/fr/neri/brumelame/game/cell/Cell.java) : Classe abstraite pour les cases du plateau
+- [`EmptyCell`](src/fr/neri/brumelame/game/cell/EmptyCell.java) : Case vide
+- [`Bonus`](src/fr/neri/brumelame/game/cell/Bonus.java) : Case bonus
+- [`Enemy`](src/fr/neri/brumelame/game/cell/Enemy.java) : Case ennemi
+- [`WeaponCell`](src/fr/neri/brumelame/game/cell/WeaponCell.java) : Case arme
+
+### Interface utilisateur (`ui`)
+- [`Menu`](src/fr/neri/brumelame/ui/Menu.java) : Gère l'interface utilisateur en ligne de commande
