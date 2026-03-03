@@ -1,10 +1,9 @@
 package fr.neri.brumelame.game;
 
-import fr.neri.brumelame.domain.Character;
-import fr.neri.brumelame.domain.Warrior;
-import fr.neri.brumelame.domain.Wizard;
+import fr.neri.brumelame.domain.character.Character;
+import fr.neri.brumelame.domain.character.Warrior;
+import fr.neri.brumelame.domain.character.Wizard;
 import fr.neri.brumelame.ui.Menu;
-import fr.neri.brumelame.domain.OffensiveEquipement;
 
 import java.util.Objects;
 
@@ -17,17 +16,25 @@ import java.util.Objects;
  */
 public class Game {
 
-    /** Dernière case à atteindre pour terminer la partie. */
+    /**
+     * Dernière case à atteindre pour terminer la partie.
+     */
     private final int FINAL_CELL = 64;
 
-    /** Interface console de dialogue avec le joueur. */
+    /**
+     * Interface console de dialogue avec le joueur.
+     */
     private Menu menu;
-    /** Personnage contrôlé par le joueur. */
+    /**
+     * Personnage contrôlé par le joueur.
+     */
     private Character character;
-    /** Dé utilisé pour les déplacements. */
+    /**
+     * Dé utilisé pour les déplacements.
+     */
     private Dice dice;
 
-    private int playerPosition = 1 ;
+    private int playerPosition = 1;
 
     /**
      * Initialise une nouvelle partie avec un menu et un dé standard (1 à 6).

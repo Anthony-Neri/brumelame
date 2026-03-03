@@ -1,6 +1,6 @@
-package fr.neri.brumelame.domain;
+package fr.neri.brumelame.domain.equipment;
 
-public class Potion extends DefensiveEquipement{
+public class Potion extends DefensiveEquipment {
 
     public Potion(String name, int bonus) {
         String type = "potion";

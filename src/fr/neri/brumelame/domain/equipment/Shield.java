@@ -1,6 +1,6 @@
-package fr.neri.brumelame.domain;
+package fr.neri.brumelame.domain.equipment;
 
-public class Shield extends DefensiveEquipement{
+public class Shield extends DefensiveEquipment {
 
     public Shield(String name, int bonus) {
         String type = "shield";

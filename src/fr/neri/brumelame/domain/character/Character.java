@@ -1,4 +1,7 @@
-package fr.neri.brumelame.domain;
+package fr.neri.brumelame.domain.character;
+
+import fr.neri.brumelame.domain.equipment.DefensiveEquipment;
+import fr.neri.brumelame.domain.equipment.OffensiveEquipment;
 
 /**
  * Représente un personnage du jeu.
@@ -17,9 +20,9 @@ public abstract class Character {
     /** Valeur d'attaque de base du personnage. */
     private int attack;
     /** Équipement offensif actuellement porté. */
-    private OffensiveEquipement equipement;
+    private OffensiveEquipment equipement;
 
-    private DefensiveEquipement defEquipement;
+    private DefensiveEquipment defEquipement;
 
 
 
@@ -34,7 +37,7 @@ public abstract class Character {
      * @param attack valeur d'attaque
      * @param equipement équipement offensif initial
      */
-    public Character(String type, String name, int health, int attack, OffensiveEquipement equipement) {
+    public Character(String type, String name, int health, int attack, OffensiveEquipment equipement) {
         this.type = type;
         this.name = name;
         this.health = health;
@@ -75,7 +78,7 @@ public abstract class Character {
      *
      * @return équipement offensif
      */
-    public OffensiveEquipement getEquipement() {
+    public OffensiveEquipment getEquipement() {
         return equipement;
     }
 
@@ -111,7 +114,7 @@ public abstract class Character {
      *
      * @param equipement nouvel équipement offensif
      */
-    public void setEquipement(OffensiveEquipement equipement) {
+    public void setEquipement(OffensiveEquipment equipement) {
         this.equipement = equipement;
     }
 

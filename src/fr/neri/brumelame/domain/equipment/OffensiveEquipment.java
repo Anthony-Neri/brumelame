@@ -1,11 +1,11 @@
-package fr.neri.brumelame.domain;
+package fr.neri.brumelame.domain.equipment;
 
-public abstract class OffensiveEquipement {
+public abstract class OffensiveEquipment {
     private String type;
     private String name;
     private int bonusAttack;
 
-    public OffensiveEquipement(String name, String type, int attack) {
+    public OffensiveEquipment(String name, String type, int attack) {
         this.name = name;
         this.type = type;
         this.bonusAttack = attack;

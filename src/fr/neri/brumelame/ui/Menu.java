@@ -1,6 +1,6 @@
 package fr.neri.brumelame.ui;
 
-import fr.neri.brumelame.domain.Character;
+import fr.neri.brumelame.domain.character.Character;
 
 import java.util.Scanner;
 
