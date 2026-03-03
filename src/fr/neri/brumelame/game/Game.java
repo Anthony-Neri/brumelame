@@ -39,7 +39,7 @@ public class Game {
 
     private int playerPosition = 0;
 
-    private List<Cell> Cells;
+    private List<Cell> board;
 
     /**
      * Initialise une nouvelle partie avec un menu et un dé standard (1 à 6).
@@ -47,7 +47,7 @@ public class Game {
     public Game() {
         this.menu = new Menu();
         this.dice = new Dice(1, 1);
-        this.Cells = new ArrayList<Cell>();
+        this.board = new ArrayList<Cell>();
     }
 
     /**
@@ -153,7 +153,7 @@ public class Game {
         createBoard();
 
         while (playerPosition < FINAL_CELL){
-            menu.printCell(Cells.get(playerPosition));
+            menu.printCell(board.get(playerPosition));
 
             int choice = menu.askAction(playerPosition);
             switch (choice) {
@@ -180,10 +180,10 @@ public class Game {
     }
 
     private void createBoard(){
-        Cells.add(new Empty());
-        Cells.add(new Ennemy());
-        Cells.add(new Weapon());
-        Cells.add(new Bonus());
+        board.add(new EmptyCell());
+        board.add(new Ennemy());
+        board.add(new Weapon());
+        board.add(new Bonus());
     }
 
 
