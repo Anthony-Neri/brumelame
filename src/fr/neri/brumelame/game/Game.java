@@ -27,6 +27,8 @@ public class Game {
     /** Dé utilisé pour les déplacements. */
     private Dice dice;
 
+    private int playerPosition = 1 ;
+
     /**
      * Initialise une nouvelle partie avec un menu et un dé standard (1 à 6).
      */
@@ -136,8 +138,8 @@ public class Game {
      */
     public void play() {
 
-        while (character.getCell() < FINAL_CELL) {
-            int choice = menu.askAction(character.getCell());
+        while (playerPosition < FINAL_CELL) {
+            int choice = menu.askAction(playerPosition);
             switch (choice) {
                 case 1 -> moveCharacter();
             }
@@ -153,8 +155,7 @@ public class Game {
      */
     private void moveCharacter() {
         int diceResult = dice.roll();
-        int newPosition = character.getCell() + diceResult;
-        character.setCell(newPosition);
+        playerPosition += diceResult;
 
 
     }

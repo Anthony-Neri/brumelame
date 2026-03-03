@@ -20,8 +20,8 @@ public abstract class Character {
     private OffensiveEquipement equipement;
 
     private DefensiveEquipement defEquipement;
-    /** Position actuelle sur le plateau (case de départ : 1). */
-    private int cell = 1;
+
+
 
 
 
@@ -126,24 +126,6 @@ public abstract class Character {
                 " | Points de vie : " + this.health +
                 " | Attaque : " + this.attack +
                 " | Équipement : " + this.equipement;
-    }
-
-    /**
-     * Retourne la case actuelle du personnage.
-     *
-     * @return numéro de case
-     */
-    public int getCell() {
-        return cell;
-    }
-
-    /**
-     * Définit la case actuelle du personnage.
-     *
-     * @param cell nouvelle case
-     */
-    public void setCell(int cell) {
-        this.cell = cell;
     }
 
 }
