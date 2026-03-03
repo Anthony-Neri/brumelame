@@ -19,7 +19,7 @@ public abstract class Character {
     /** Équipement offensif actuellement porté. */
     private OffensiveEquipement equipement;
 
-
+    private DefensiveEquipement defEquipement;
     /** Position actuelle sur le plateau (case de départ : 1). */
     private int cell = 1;
 
@@ -40,6 +40,7 @@ public abstract class Character {
         this.health = health;
         this.attack = attack;
         this.equipement = equipement;
+        this.defEquipement = null;
     }
 
     /**
