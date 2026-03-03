@@ -20,9 +20,9 @@ public abstract class Character {
     /** Valeur d'attaque de base du personnage. */
     private int attack;
     /** Équipement offensif actuellement porté. */
-    private OffensiveEquipment equipement;
+    private OffensiveEquipment equipment;
 
-    private DefensiveEquipment defEquipement;
+    private DefensiveEquipment defEquipment;
 
 
 
