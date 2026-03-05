@@ -6,13 +6,15 @@ import fr.neri.brumelame.domain.equipment.OffensiveEquipment;
 /**
  * Représente un personnage du jeu.
  * <p>
- * Un personnage possède un type (classe), un nom, des points de vie,
+ * Un personnage possède une classe, un nom, des points de vie,
  * une valeur d'attaque, un équipement offensif et une position sur le plateau.
  * </p>
  */
-public abstract class Character {
-    /** Type du personnage (ex. Guerrier, Magicien). */
-    private String type;
+public abstract class Hero {
+
+    private int id;
+    /** Classe du personnage (ex. Guerrier, Magicien). */
+    private String heroClass;
     /** Nom du personnage. */
     private String name;
     /** Points de vie du personnage. */
@@ -20,30 +22,38 @@ public abstract class Character {
     /** Valeur d'attaque de base du personnage. */
     private int attack;
     /** Équipement offensif actuellement porté. */
-    private OffensiveEquipment equipment;
-
-    private DefensiveEquipment defEquipment;
-
-
-
-
+    private OffensiveEquipment offEquip;
+    /** Équipement défensif actuellement porté. */
+    private DefensiveEquipment defEquip;
+    /** ID du plateau. */
+    private int boardId;
+    /** ID de la cellule. */
+    private int cellId;
 
     /**
      * Construit un personnage avec ses caractéristiques principales.
      *
-     * @param type type/classe du personnage
+     * @param heroClass classe du personnage
      * @param name nom du personnage
      * @param health points de vie
      * @param attack valeur d'attaque
-     * @param equipment équipement offensif initial
+     * @param offEquip équipement offensif initial
      */
-    public Character(String type, String name, int health, int attack, OffensiveEquipment equipment) {
-        this.type = type;
+    public Hero(String heroClass, String name, int health, int attack, OffensiveEquipment offEquip) {
+        this.heroClass = heroClass;
         this.name = name;
         this.health = health;
         this.attack = attack;
-        this.equipment = equipment;
-        this.defEquipment = null;
+        this.offEquip = offEquip;
+        this.defEquip = null;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     /**
@@ -78,8 +88,8 @@ public abstract class Character {
      *
      * @return équipement offensif
      */
-    public OffensiveEquipment getequipment() {
-        return equipment;
+    public OffensiveEquipment getOffEquip() {
+        return offEquip;
     }
 
     /**
@@ -100,6 +110,42 @@ public abstract class Character {
         this.attack = attack;
     }
 
+    public String getHeroClass() {
+        return heroClass;
+    }
+
+    public void setHeroClass(String heroClass) {
+        this.heroClass = heroClass;
+    }
+
+    public void setOffEquip(OffensiveEquipment offEquip) {
+        this.offEquip = offEquip;
+    }
+
+    public DefensiveEquipment getDefEquip() {
+        return defEquip;
+    }
+
+    public void setDefEquip(DefensiveEquipment defEquip) {
+        this.defEquip = defEquip;
+    }
+
+    public int getBoardId() {
+        return boardId;
+    }
+
+    public void setBoardId(int boardId) {
+        this.boardId = boardId;
+    }
+
+    public int getCellId() {
+        return cellId;
+    }
+
+    public void setCellId(int cellId) {
+        this.cellId = cellId;
+    }
+
     /**
      * Modifie les points de vie du personnage.
      *
@@ -110,25 +156,16 @@ public abstract class Character {
     }
 
     /**
-     * Modifie l'équipement offensif du personnage.
-     *
-     * @param equipment nouvel équipement offensif
-     */
-    public void setequipment(OffensiveEquipment equipment) {
-        this.equipment = equipment;
-    }
-
-    /**
      * Retourne une représentation textuelle du personnage.
      *
      * @return chaîne décrivant le personnage
      */
     public String toString(){
         return this.name +
-                " | Classe : " + this.type +
+                " | Classe : " + this.heroClass +
                 " | Points de vie : " + this.health +
                 " | Attaque : " + this.attack +
-                " | Équipement : " + this.equipment;
+                " | Équipement offensif : " + this.offEquip +
+                " | Équipement défensif : " + this.defEquip;
     }
-
 }

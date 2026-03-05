@@ -31,3 +31,5 @@ bin/
 
 .idea
 *.iml
+
+/src/resources/db.properties

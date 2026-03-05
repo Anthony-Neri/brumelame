@@ -1,13 +1,10 @@
 package fr.neri.brumelame.game;
 
-import fr.neri.brumelame.domain.character.Character;
+import fr.neri.brumelame.domain.character.Hero;
 import fr.neri.brumelame.domain.character.Warrior;
 import fr.neri.brumelame.domain.character.Wizard;
-import fr.neri.brumelame.game.cell.*;
 import fr.neri.brumelame.ui.Menu;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -26,7 +23,7 @@ public class Game {
     /**
      * Personnage contrôlé par le joueur.
      */
-    private Character character;
+    private Hero hero;
     /**
      * Dé utilisé pour les déplacements.
      */
@@ -65,7 +62,7 @@ public class Game {
     public void startGame() {
         int choice = menu.askCharacterType();
         String type = (choice == 1) ? "wizard" : "warrior";
-        this.character = createCharacter(type, menu.askNameCharacter());
+        this.hero = createCharacter(type, menu.askNameCharacter());
 
         characterMenu();
 
@@ -98,8 +95,8 @@ public class Game {
             int choice = menu.askCharacterMenuChoice();
 
             switch (choice) {
-                case 1 -> menu.printCharacter(character);
-                case 2 -> character.setName(menu.askNameCharacter());
+                case 1 -> menu.printCharacter(hero);
+                case 2 -> hero.setName(menu.askNameCharacter());
                 case 3 -> {
                     mainMenu();
                     return;
@@ -129,11 +126,11 @@ public class Game {
      * @return une instance de {@link Wizard} si le type vaut {@code "wizard"},
      * sinon une instance de {@link Warrior}
      */
-    public Character createCharacter(String type, String name) {
+    public Hero createCharacter(String type, String name) {
         if (Objects.equals(type, "wizard")) {
-            return new Wizard(name);
+            return new Wizard(name, 10 ,5);
         } else {
-            return new Warrior(name);
+            return new Warrior(name, 5 , 8);
         }
     }
 

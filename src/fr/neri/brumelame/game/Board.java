@@ -6,19 +6,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Board {
+    private int id;
     private List<Cell> cells;
-    private final int FINAL_CELL = 4;
+    private  int size;
+    private String name;
 
-    public Board() {
+    public Board(String name, int size ) {
         this.cells = new ArrayList<Cell>();
+        this.size = size;
+        this.name = name;
         initializeCells();
+    }
+    
+    public Board(String name) { // Se cond constructeur avec taille par défaut
+        this(name, 64); // taille par défaut
     }
 
     private void initializeCells() {
-        cells.add(new EmptyCell());
-        cells.add(new Enemy());
-        cells.add(new WeaponCell());
-        cells.add(new Bonus());
+//        cells.add(new EmptyCell());
+//        cells.add(new EnemyCell());
+//        cells.add(new EquipmentCell());
+//        cells.add(new Bonus());
     }
 
     public Cell getCell(int position) {
@@ -26,6 +34,26 @@ public class Board {
     }
 
     public int getFinalCell() {
-        return FINAL_CELL;
+        return size;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

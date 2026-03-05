@@ -1,32 +1,8 @@
 package fr.neri.brumelame.domain.equipment;
 
-public abstract class OffensiveEquipment {
-    private String type;
-    private String name;
-    private int bonusAttack;
+public class OffensiveEquipment extends Equipment{
 
-    public OffensiveEquipment(String name, String type, int attack) {
-        this.name = name;
-        this.type = type;
-        this.bonusAttack = attack;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public int getBonusAttack() {
-        return bonusAttack;
-    }
-
-
-    public String toString() {
-        return this.name
-                + " | type : " + this.type
-                + " | Bonus d'attaque : " + this.bonusAttack;
+    public OffensiveEquipment(String type, String name, String category, String description, int bonus) {
+        super(type, name, category, description, bonus);
     }
 }

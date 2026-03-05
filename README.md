@@ -10,7 +10,7 @@ src/
 │   ├── app/
 │   │   └── Main.java
 │   ├── domain/
-│   │   ├── character/
+│   │   ├── hero/
 │   │   │   ├── Character.java
 │   │   │   ├── Warrior.java
 │   │   │   └── Wizard.java
@@ -47,7 +47,7 @@ classDiagram
     class Game {
         -FINAL_CELL: int$
         -menu: Menu
-        -character: Character
+        -hero: Character
         -dice: Dice
         -board: Board
         +Game()
@@ -168,7 +168,7 @@ classDiagram
         +askCharacterMenuChoice() int
         +askNameCharacter() String
         +askAction(int characterPosition) int
-        +printCharacter(Character character) void
+        +printCharacter(Character hero) void
         +end() void
         +quit() void
         -askInt(String message, int minValue, int maxValue) int
@@ -218,10 +218,10 @@ classDiagram
 ### Application
 - [`Main`](src/fr/neri/brumelame/app/Main.java) : Point d'entrée de l'application
 
-### Personnages (`domain/character`)
-- [`Character`](src/fr/neri/brumelame/domain/character/Character.java) : Classe abstraite pour les personnages
-- [`Warrior`](src/fr/neri/brumelame/domain/character/Warrior.java) : Classe guerrier (10 PV, 5 ATK)
-- [`Wizard`](src/fr/neri/brumelame/domain/character/Wizard.java) : Classe sorcier (6 PV, 8 ATK)
+### Personnages (`domain/hero`)
+- [`Character`](src/fr/neri/brumelame/domain/hero/Character.java) : Classe abstraite pour les personnages
+- [`Warrior`](src/fr/neri/brumelame/domain/hero/Warrior.java) : Classe guerrier (10 PV, 5 ATK)
+- [`Wizard`](src/fr/neri/brumelame/domain/hero/Wizard.java) : Classe sorcier (6 PV, 8 ATK)
 
 ### Équipements (`domain/equipment`)
 - [`OffensiveEquipment`](src/fr/neri/brumelame/domain/equipment/OffensiveEquipment.java) : Classe abstraite pour les équipements offensifs
