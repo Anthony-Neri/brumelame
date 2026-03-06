@@ -14,6 +14,15 @@ public abstract class Cell {
         this.boardId = boardId;
     }
 
+    @Override
+    public String toString() {
+        return "Cell{" +
+                "id=" + id +
+                ", number=" + number +
+                ", boardId=" + boardId +
+                '}';
+    }
+
     public int getId() {
         return id;
     }

@@ -1,8 +1,13 @@
 package fr.neri.brumelame.game;
 
+import fr.neri.brumelame.dao.EquipmentDAO;
+import fr.neri.brumelame.dao.HeroClassesDAO;
+import fr.neri.brumelame.dao.HeroDAO;
 import fr.neri.brumelame.domain.character.Hero;
+import fr.neri.brumelame.domain.character.HeroClasse;
 import fr.neri.brumelame.domain.character.Warrior;
 import fr.neri.brumelame.domain.character.Wizard;
+import fr.neri.brumelame.domain.equipment.OffensiveEquipment;
 import fr.neri.brumelame.ui.Menu;
 
 import java.util.Objects;
@@ -33,13 +38,21 @@ public class Game {
 
     private Board board;
 
+    private EquipmentDAO equipmentDAO;
+    private HeroClassesDAO heroClassesDAO;
+    private HeroDAO heroDAO;
+
     /**
      * Initialise une nouvelle partie avec un menu et un dé standard (1 à 6).
      */
     public Game() {
         this.menu = new Menu();
         this.dice = new Dice(1, 1);
-        this.board = new Board();
+        this.board = new Board("test", 1);
+        equipmentDAO = new EquipmentDAO();
+        heroClassesDAO = new HeroClassesDAO();
+        heroDAO = new HeroDAO();
+
     }
 
     /**
@@ -60,9 +73,13 @@ public class Game {
      * Lance la création du personnage puis ouvre le menu personnage.
      */
     public void startGame() {
-        int choice = menu.askCharacterType();
-        String type = (choice == 1) ? "wizard" : "warrior";
-        this.hero = createCharacter(type, menu.askNameCharacter());
+
+        board.initialize();
+        System.out.println(board);
+
+       int choice = menu.askCharacterType();
+       String type = (choice == 1) ? "wizard" : "warrior";
+       this.hero = createHero(type, menu.askNameCharacter());
 
         characterMenu();
 
@@ -126,11 +143,31 @@ public class Game {
      * @return une instance de {@link Wizard} si le type vaut {@code "wizard"},
      * sinon une instance de {@link Warrior}
      */
-    public Hero createCharacter(String type, String name) {
+    public Hero createHero(String type, String name) {
+
+        OffensiveEquipment epee = (OffensiveEquipment) equipmentDAO.find(2);
+
+        HeroClasse heroClasse;
+
         if (Objects.equals(type, "wizard")) {
-            return new Wizard(name, 10 ,5);
+           heroClasse =  heroClassesDAO.findByName("wizard");
+
+
+           Wizard wizard = new Wizard(name, heroClasse.getHealth() , heroClasse.getAttack(), epee);
+            wizard.setBoardId(board.getId());
+            wizard.setCellId(board.getCell(0).getId());
+           wizard.setId(heroDAO.create(wizard));
+           return wizard;
+
         } else {
-            return new Warrior(name, 5 , 8);
+
+            heroClasse =  heroClassesDAO.findByName("warrior");
+
+            Warrior warrior = new Warrior(name, heroClasse.getHealth() , heroClasse.getAttack(), epee);
+            warrior.setBoardId(board.getId());
+            warrior.setCellId(board.getCell(0).getId());
+            warrior.setId(heroDAO.create(warrior));
+            return warrior;
         }
     }
 

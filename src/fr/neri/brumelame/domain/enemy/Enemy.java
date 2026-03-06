@@ -44,4 +44,14 @@ public class Enemy {
     public void setAttack(int attack) {
         this.attack = attack;
     }
+
+    @Override
+    public String toString() {
+        return "Enemy{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", health=" + health +
+                ", attack=" + attack +
+                '}';
+    }
 }

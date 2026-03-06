@@ -15,13 +15,13 @@ import java.sql.Types;
 
 public class CellDAO extends DAO<Cell> {
 
-    public boolean create(Cell cell) {
+    public int create(Cell cell) {
         String sql = """
             INSERT INTO cells (number, id_board, id_equipement, id_ennemy)
             VALUES (?, ?, ?, ?)
         """;
 
-        try (PreparedStatement ps = conn.getConnection().prepareStatement(sql)) {
+        try (PreparedStatement ps = conn.getConnection().prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, cell.getNumber());
             ps.setInt(2, cell.getBoardId());
 
@@ -34,9 +34,17 @@ public class CellDAO extends DAO<Cell> {
             if (enemyId != null) ps.setInt(4, enemyId);
             else ps.setNull(4, Types.INTEGER);
 
-            return ps.executeUpdate() > 0;
+            if (ps.executeUpdate() > 0) {
+                try (ResultSet rs = ps.getGeneratedKeys()) {
+                    if (rs.next()) {
+
+                        return rs.getInt(1);
+                    }
+                }
+            }
+            return -1;
         } catch (SQLException e) {
-            return false;
+            return -1;
         }
     }
 

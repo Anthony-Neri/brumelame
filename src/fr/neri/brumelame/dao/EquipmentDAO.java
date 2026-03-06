@@ -19,7 +19,7 @@ public class EquipmentDAO extends DAO<Equipment> {
         super();
     }
 
-    @Override
+
     public boolean create(Equipment equipment) {
         String sql = """
             INSERT INTO equipments (type, name, category, description, bonus)
@@ -39,7 +39,7 @@ public class EquipmentDAO extends DAO<Equipment> {
         }
     }
 
-    @Override
+
     public boolean delete(Equipment equipment) {
         String sql = "DELETE FROM equipments WHERE id = ?";
 
@@ -51,7 +51,7 @@ public class EquipmentDAO extends DAO<Equipment> {
         }
     }
 
-    @Override
+
     public boolean update(Equipment equipment) {
         String sql = """
             UPDATE equipments 
@@ -73,7 +73,7 @@ public class EquipmentDAO extends DAO<Equipment> {
         }
     }
 
-    @Override
+
     public Equipment find(int id) {
         String sql = "SELECT * FROM equipments WHERE id = ?";
 

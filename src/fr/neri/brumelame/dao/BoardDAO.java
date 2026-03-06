@@ -9,30 +9,38 @@ import java.sql.SQLException;
 public class BoardDAO extends DAO<Board> {
 
 
-    public boolean create(Board board) {
-        String sql = "INSERT INTO board (size, name) VALUES (?,?)";
+    public int create(Board board) {
+        String sql = "INSERT INTO boards (size, name) VALUES (?,?)";
 
-        try (PreparedStatement ps = conn.getConnection().prepareStatement(sql)) {
+        try (PreparedStatement ps = conn.getConnection().prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, board.getSize());
-            ps.setString(1, board.getName());
+            ps.setString(2, board.getName()); 
 
-            return ps.executeUpdate() > 0;
+            if (ps.executeUpdate() > 0) {
+                try (ResultSet rs = ps.getGeneratedKeys()) {
+                    if (rs.next()) {
 
+                        return rs.getInt(1);
+                    }
+                }
+            }
+            return -1;
 
         } catch (SQLException e) {
-            return false;
+
+            return -1;
         }
     }
 
-    @Override
+
     public boolean delete(Board obj) {
         return false;
     }
 
 
-    @Override
+
     public Board find(int id) {
-        String sql = "Select * from `board` WHERE id = ?";
+        String sql = "Select * from `boards` WHERE id = ?";
 
         try (PreparedStatement ps = conn.getConnection().prepareStatement(sql)) {
             ps.setInt(1, id);
@@ -63,7 +71,7 @@ public class BoardDAO extends DAO<Board> {
         if (board == null) return false;
         if (board.getId() < 1) return false;
 
-        String sql = "UPDATE Board SET size = ?, name = ? WHERE id = ?";
+        String sql = "UPDATE boards SET size = ?, name = ? WHERE id = ?";
 
         try (PreparedStatement ps = conn.getConnection().prepareStatement(sql)) {
 
