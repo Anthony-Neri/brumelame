@@ -155,6 +155,9 @@ public abstract class Hero {
         this.health = health;
     }
 
+    public void receivedDamage(int damage){
+        this.health -= damage;
+    }
     /**
      * Retourne une représentation textuelle du personnage.
      *

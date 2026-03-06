@@ -7,7 +7,10 @@ import fr.neri.brumelame.domain.character.Hero;
 import fr.neri.brumelame.domain.character.HeroClasse;
 import fr.neri.brumelame.domain.character.Warrior;
 import fr.neri.brumelame.domain.character.Wizard;
+import fr.neri.brumelame.domain.enemy.Enemy;
 import fr.neri.brumelame.domain.equipment.OffensiveEquipment;
+import fr.neri.brumelame.game.cell.Cell;
+import fr.neri.brumelame.game.cell.EnemyCell;
 import fr.neri.brumelame.ui.Menu;
 
 import java.util.Objects;
@@ -206,6 +209,36 @@ public class Game {
 
 
     }
+    private int  interactCellHero(){
+
+        if (board.getCell(playerPosition) instanceof EnemyCell cell){
+            Enemy enemy = cell.getEnemy();
+
+            while(enemy.getHealth() > 0 ) {
+
+                enemy.receivedDamage(hero.getAttack());
+
+                if (enemy.getHealth() <= 0 ){
+                    hero.receivedDamage(enemy.getAttack());
+                }
+
+                if (hero.getHealth() <= 0){
+                    return 0;
+                }
+
+            }
+            return 1;
+
+
+
+
+
+
+        }
+        return 1;
+    }
+
+
 
 
 }

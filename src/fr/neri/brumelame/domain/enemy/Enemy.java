@@ -45,6 +45,12 @@ public class Enemy {
         this.attack = attack;
     }
 
+    public void receivedDamage(int damage){
+
+        this.health -= damage;
+
+    }
+
     @Override
     public String toString() {
         return "Enemy{" +
