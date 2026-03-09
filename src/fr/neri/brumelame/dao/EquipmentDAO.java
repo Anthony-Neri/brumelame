@@ -108,4 +108,42 @@ public class EquipmentDAO extends DAO<Equipment> {
             return null;
         }
     }
+    public Equipment findByHeroClasseAndNivAndType(String heroClasse, int niv, String type ) {
+        String sql = "SELECT * FROM equipments e " +
+                "JOIN heroclasses_categories hc on e.category = hc.category " +
+                "WHERE niv = ? and hc.heroclasse = ? and type = ? LIMIT 1 ";
+
+        try (PreparedStatement ps = conn.getConnection().prepareStatement(sql)) {
+            ps.setString(2, heroClasse);
+            ps.setInt(1, niv);
+            ps.setString(3, type);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (!rs.next()) {
+                    return null;
+                }
+
+                String name = rs.getString("name");
+                String category = rs.getString("category");
+                String description = rs.getString("description");
+                int bonus = rs.getInt("bonus");
+
+                Equipment equipment;
+                switch(type){
+                    case "ATTACK" ->   equipment = new OffensiveEquipment(type, name, category, description, bonus);
+                    case "DEFENSE" ->   equipment = new DefensiveEquipment(type, name, category, description, bonus);
+                    default -> {
+                        return null;
+                    }
+                }
+
+                equipment.setId(rs.getInt("id"));
+
+                return equipment;
+            }
+        } catch (SQLException e) {
+            return null;
+        }
+    }
+
 }

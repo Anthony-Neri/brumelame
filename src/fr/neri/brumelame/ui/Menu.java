@@ -1,6 +1,7 @@
 package fr.neri.brumelame.ui;
 
 import fr.neri.brumelame.domain.character.Hero;
+import fr.neri.brumelame.domain.equipment.Equipment;
 import fr.neri.brumelame.game.cell.Cell;
 
 import java.util.Scanner;
@@ -64,7 +65,8 @@ public class Menu {
         System.out.println("Vous êtes à la position " + characterPosition);
         System.out.println("Vous avez " + hero.getHealth() + " points de vie.");
         System.out.println("1. Avancer");
-        return askInt("Choix", 1, 1);
+        System.out.println("2. Status");
+        return askInt("Choix", 1, 2);
     }
 
     public void printCharacter(Hero hero) {
@@ -74,6 +76,16 @@ public class Menu {
     public void printCell(Cell cell) {
         System.out.println();
         System.out.println(cell.toString());
+
+    }
+    public int askEquipEquipement(Equipment equipment){
+        System.out.println();
+        System.out.println("Vous trouver une arme :");
+        System.out.println(equipment.getName() + " Bonus : + " + equipment.getBonus() + " dommages");
+        System.out.println("Récupérer ? ");
+        System.out.println(" 1 Oui");
+        System.out.println(" 2 Non");
+        return askInt("Choix", 1, 2);
 
     }
 

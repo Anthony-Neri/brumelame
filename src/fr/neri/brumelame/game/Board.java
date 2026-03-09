@@ -3,7 +3,9 @@ package fr.neri.brumelame.game;
 import fr.neri.brumelame.dao.BoardDAO;
 import fr.neri.brumelame.dao.CellDAO;
 import fr.neri.brumelame.dao.EnemyDAO;
+import fr.neri.brumelame.dao.EquipmentDAO;
 import fr.neri.brumelame.domain.enemy.Enemy;
+import fr.neri.brumelame.domain.equipment.Equipment;
 import fr.neri.brumelame.game.cell.*;
 
 import java.time.LocalDate;
@@ -18,6 +20,7 @@ public class Board {
     private String name;
     private EnemyDAO enemyDAO;
     private CellDAO cellDAO;
+    private EquipmentDAO equipmentDAO;
 
     public Board(String name, int size ) {
         this.cells = new ArrayList<Cell>();
@@ -25,6 +28,7 @@ public class Board {
         this.name = name;
         this.enemyDAO = new EnemyDAO();
         this.cellDAO = new CellDAO();
+        this.equipmentDAO = new EquipmentDAO();
     }
 
     public Board(String name) { // Second constructeur avec taille par défaut
@@ -44,33 +48,31 @@ public class Board {
         depart.setId(cellDAO.create(depart));
         cells.add(depart);
 
+    }
+    public void initializeCells(String heroClasse) {
         Enemy sorcier = enemyDAO.find(1);
         Enemy gobelin = enemyDAO.find(2);
         Enemy dragon = enemyDAO.find(3);
+        Equipment equipOffNiv1 = equipmentDAO.findByHeroClasseAndNivAndType(heroClasse,1,"ATTACK");
+        Equipment equipOffNiv2 = equipmentDAO.findByHeroClasseAndNivAndType(heroClasse,2,"ATTACK");
 
-        List<Enemy> enemies = new ArrayList<>();
-
-        enemies.add(sorcier);
-        enemies.add(gobelin);
-        enemies.add(dragon);
-        int i = 1;
-        for (Enemy enemy : enemies){
-            EnemyCell cell = new EnemyCell(i, this.id , enemy);
-
-            cell.setId(cellDAO.create(cell));
-            cells.add(cell);
-            i++;
-        }
-
-
+        addEnemyCell(sorcier,1);
+        addEnemyCell(gobelin,2);
+        addEquipmentCell(equipOffNiv1,3);
+        addEnemyCell(dragon,4);
 
 
     }
-    private void initializeCells() {
-//        cells.add(new EmptyCell());
-//        cells.add(new EnemyCell());
-//        cells.add(new EquipmentCell());
-//        cells.add(new Bonus());
+
+    private void addEnemyCell(Enemy enemy, int position){
+        EnemyCell cell = new EnemyCell(position, this.id, enemy);
+        cell.setId(cellDAO.create(cell));
+        cells.add(cell);
+    }
+    private void addEquipmentCell(Equipment equipment, int position) {
+        EquipmentCell cell = new EquipmentCell(position, this.id, equipment);
+        cell.setId(cellDAO.create(cell));
+        cells.add(cell);
     }
 
     public Cell getCell(int position) {

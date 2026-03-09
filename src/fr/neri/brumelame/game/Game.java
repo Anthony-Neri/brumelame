@@ -13,6 +13,7 @@ import fr.neri.brumelame.game.cell.Cell;
 import fr.neri.brumelame.game.cell.EnemyCell;
 import fr.neri.brumelame.ui.Menu;
 
+import java.util.Locale;
 import java.util.Objects;
 
 /**
@@ -78,11 +79,13 @@ public class Game {
     public void startGame() {
 
         board.initialize();
-        System.out.println(board);
+
 
         int choice = menu.askCharacterType();
         String type = (choice == 1) ? "wizard" : "warrior";
         this.hero = createHero(type, menu.askNameCharacter());
+
+        board.initializeCells(hero.getHeroClass());
 
         characterMenu();
 
@@ -148,15 +151,16 @@ public class Game {
      */
     public Hero createHero(String type, String name) {
 
-        OffensiveEquipment epee = (OffensiveEquipment) equipmentDAO.find(2);
+
 
         HeroClasse heroClasse;
+        OffensiveEquipment equip = (OffensiveEquipment) equipmentDAO.findByHeroClasseAndNivAndType(type.toUpperCase(),0, "ATTACK");
 
         if (Objects.equals(type, "wizard")) {
             heroClasse = heroClassesDAO.findByName("wizard");
 
 
-            Wizard wizard = new Wizard(name, heroClasse.getHealth(), heroClasse.getAttack(), epee);
+            Wizard wizard = new Wizard(name, heroClasse.getHealth(), heroClasse.getAttack(), equip);
             wizard.setBoardId(board.getId());
             wizard.setCellId(board.getCell(0).getId());
             wizard.setId(heroDAO.create(wizard));
@@ -166,7 +170,7 @@ public class Game {
 
             heroClasse = heroClassesDAO.findByName("warrior");
 
-            Warrior warrior = new Warrior(name, heroClasse.getHealth(), heroClasse.getAttack(), epee);
+            Warrior warrior = new Warrior(name, heroClasse.getHealth(), heroClasse.getAttack(), equip);
             warrior.setBoardId(board.getId());
             warrior.setCellId(board.getCell(0).getId());
             warrior.setId(heroDAO.create(warrior));
@@ -188,6 +192,7 @@ public class Game {
             int choice = menu.askAction(playerPosition, this.hero);
             switch (choice) {
                 case 1 -> moveCharacter();
+                case 2 -> menu.printCharacter(hero);
             }
 
         }

@@ -155,6 +155,9 @@ public abstract class Hero {
         this.health = health;
     }
 
+    public int getDamage(){
+        return this.attack + this.offEquip.getBonus();
+    }
     public void receivedDamage(int damage){
         this.health -= damage;
     }

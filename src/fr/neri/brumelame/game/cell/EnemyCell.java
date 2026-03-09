@@ -28,8 +28,8 @@ public class EnemyCell extends Cell {
         StringBuilder fight = new StringBuilder("Vous êtes attaquer par : " + enemy.getName()+ " ! \n");
 
         while (this.enemy.getHealth() > 0 && hero.getHealth() > 0) {
-            fight.append("Vous infligez ").append(hero.getAttack()).append(" au ").append(enemy.getName()+ " ! \n");
-            enemy.receivedDamage(hero.getAttack());
+            fight.append("Vous infligez ").append(hero.getDamage()).append(" au ").append(enemy.getName()+ " ! \n");
+            enemy.receivedDamage(hero.getDamage());
 
             if (enemy.getHealth() > 0) {
                 fight.append("Le " + enemy.getName() + " vous inflige " + enemy.getAttack() + " ! \n");
