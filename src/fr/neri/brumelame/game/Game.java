@@ -51,7 +51,7 @@ public class Game {
     public Game() {
         this.menu = new Menu();
         this.dice = new Dice(1, 1);
-        this.board = new Board("test", 1);
+        this.board = new Board("test", 4);
         equipmentDAO = new EquipmentDAO();
         heroClassesDAO = new HeroClassesDAO();
         heroDAO = new HeroDAO();
@@ -80,9 +80,9 @@ public class Game {
         board.initialize();
         System.out.println(board);
 
-       int choice = menu.askCharacterType();
-       String type = (choice == 1) ? "wizard" : "warrior";
-       this.hero = createHero(type, menu.askNameCharacter());
+        int choice = menu.askCharacterType();
+        String type = (choice == 1) ? "wizard" : "warrior";
+        this.hero = createHero(type, menu.askNameCharacter());
 
         characterMenu();
 
@@ -153,20 +153,20 @@ public class Game {
         HeroClasse heroClasse;
 
         if (Objects.equals(type, "wizard")) {
-           heroClasse =  heroClassesDAO.findByName("wizard");
+            heroClasse = heroClassesDAO.findByName("wizard");
 
 
-           Wizard wizard = new Wizard(name, heroClasse.getHealth() , heroClasse.getAttack(), epee);
+            Wizard wizard = new Wizard(name, heroClasse.getHealth(), heroClasse.getAttack(), epee);
             wizard.setBoardId(board.getId());
             wizard.setCellId(board.getCell(0).getId());
-           wizard.setId(heroDAO.create(wizard));
-           return wizard;
+            wizard.setId(heroDAO.create(wizard));
+            return wizard;
 
         } else {
 
-            heroClasse =  heroClassesDAO.findByName("warrior");
+            heroClasse = heroClassesDAO.findByName("warrior");
 
-            Warrior warrior = new Warrior(name, heroClasse.getHealth() , heroClasse.getAttack(), epee);
+            Warrior warrior = new Warrior(name, heroClasse.getHealth(), heroClasse.getAttack(), epee);
             warrior.setBoardId(board.getId());
             warrior.setCellId(board.getCell(0).getId());
             warrior.setId(heroDAO.create(warrior));
@@ -183,19 +183,18 @@ public class Game {
      */
     public void play() {
 
-        while (playerPosition < board.getFinalCell()){
-            menu.printCell(board.getCell(playerPosition));
+        while (!gameOver() && !finishGame()) {
 
-            int choice = menu.askAction(playerPosition);
+            int choice = menu.askAction(playerPosition, this.hero);
             switch (choice) {
                 case 1 -> moveCharacter();
             }
 
+        }
+        ;
 
-        };
-
-        menu.end();
-
+        if (gameOver()) menu.defeat();
+        if (finishGame()) menu.end();
 
     }
 
@@ -207,38 +206,26 @@ public class Game {
         int diceResult = dice.roll();
         playerPosition += diceResult;
 
+        hero.setCellId(board.getCell(playerPosition).getId());
+
+        this.interactCellHero(playerPosition);
+
 
     }
-    private int  interactCellHero(){
 
-        if (board.getCell(playerPosition) instanceof EnemyCell cell){
-            Enemy enemy = cell.getEnemy();
+    private void interactCellHero(int playerPosition) {
 
-            while(enemy.getHealth() > 0 ) {
+        menu.printInteractCell(this.board.getCell(playerPosition).interact(this.hero));
 
-                enemy.receivedDamage(hero.getAttack());
-
-                if (enemy.getHealth() <= 0 ){
-                    hero.receivedDamage(enemy.getAttack());
-                }
-
-                if (hero.getHealth() <= 0){
-                    return 0;
-                }
-
-            }
-            return 1;
-
-
-
-
-
-
-        }
-        return 1;
     }
 
+    private boolean gameOver() {
+        return hero.getHealth() <= 0;
+    }
 
+    private boolean finishGame() {
+        return playerPosition >= board.getFinalCell();
+    }
 
 
 }

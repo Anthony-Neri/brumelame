@@ -1,5 +1,6 @@
 package fr.neri.brumelame.game.cell;
 
+import fr.neri.brumelame.domain.character.Hero;
 import fr.neri.brumelame.domain.equipment.Equipment;
 import fr.neri.brumelame.domain.enemy.Enemy;
 
@@ -55,4 +56,7 @@ public abstract class Cell {
     public Enemy getEnemy() {
         return null;
     }
+
+
+    public abstract StringBuilder interact(Hero hero);
 }

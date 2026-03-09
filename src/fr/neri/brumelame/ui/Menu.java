@@ -13,7 +13,7 @@ public class Menu {
         input = new Scanner(System.in);
     }
 
-    public int askMainStartChoice(){
+    public int askMainStartChoice() {
         System.out.println();
         System.out.println("Brumelame");
         System.out.println("1. Nouveau Personnage");
@@ -23,9 +23,9 @@ public class Menu {
         return askInt("Choix :", 1, 2);
 
 
-
     }
-    public int askMainChoice(){
+
+    public int askMainChoice() {
         System.out.println();
         System.out.println("Brumelame");
         System.out.println("1. Menu Personnage");
@@ -34,12 +34,12 @@ public class Menu {
         return askInt("Choix :", 1, 3);
     }
 
-    public int askCharacterType(){
+    public int askCharacterType() {
         System.out.println();
         System.out.println("Choisis ta classe :");
         System.out.println("1. Sorcier");
         System.out.println("2. Guerrier");
-        return askInt("Choix" ,1 ,2 );
+        return askInt("Choix", 1, 2);
     }
 
     public int askCharacterMenuChoice() {
@@ -51,37 +51,48 @@ public class Menu {
         System.out.println("4. Commencer le jeu");
         System.out.println("5. Quitter");
 
-        return askInt("Choix" ,1 ,5 );
+        return askInt("Choix", 1, 5);
     }
-    public String askNameCharacter(){
+
+    public String askNameCharacter() {
         System.out.println();
         return askString("Nom de votre personnage : ");
     }
-    public int askAction(int characterPosition){
+
+    public int askAction(int characterPosition, Hero hero) {
         System.out.println();
-        System.out.println("Vous êtes à la position " +characterPosition );
+        System.out.println("Vous êtes à la position " + characterPosition);
+        System.out.println("Vous avez " + hero.getHealth() + " points de vie.");
         System.out.println("1. Avancer");
-        return askInt("Choix",1,1);
+        return askInt("Choix", 1, 1);
     }
 
-    public void printCharacter(Hero hero){
+    public void printCharacter(Hero hero) {
         System.out.println(hero);
     }
 
-    public void printCell(Cell cell){
+    public void printCell(Cell cell) {
         System.out.println();
         System.out.println(cell.toString());
 
     }
 
-    public void end(){
+    public void end() {
         System.out.println();
         System.out.println("Vous êtes arrivé à la fin, Bravo !.");
     }
-    public void quit(){
+
+    public void quit() {
         System.out.println();
         System.out.println("A bientôt sur Brumelame.");
     }
+    public void defeat(){
+        System.out.println();
+        System.out.println("Vous avez perdu et c'était pas compliqué.");
+        this.quit();
+
+    }
+
     public int askInt(String message, int minValue, int maxValue) {
 
         while (true) {
@@ -109,5 +120,9 @@ public class Menu {
         return input.nextLine().trim();
 
 
+    }
+
+    public void printInteractCell(StringBuilder string) {
+        System.out.print(string);
     }
 }

@@ -43,13 +43,23 @@ public class Board {
         EmptyCell depart = new EmptyCell(0, this.id);
         depart.setId(cellDAO.create(depart));
         cells.add(depart);
-        for (int i = 1; i <= size; i++) {
 
-            Enemy gobelin = enemyDAO.find(2);
-            EnemyCell cell = new EnemyCell(i, this.id , gobelin);
+        Enemy sorcier = enemyDAO.find(1);
+        Enemy gobelin = enemyDAO.find(2);
+        Enemy dragon = enemyDAO.find(3);
+
+        List<Enemy> enemies = new ArrayList<>();
+
+        enemies.add(sorcier);
+        enemies.add(gobelin);
+        enemies.add(dragon);
+        int i = 1;
+        for (Enemy enemy : enemies){
+            EnemyCell cell = new EnemyCell(i, this.id , enemy);
+
             cell.setId(cellDAO.create(cell));
             cells.add(cell);
-
+            i++;
         }
 
 

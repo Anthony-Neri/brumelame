@@ -1,5 +1,7 @@
 package fr.neri.brumelame.game.cell;
 
+import fr.neri.brumelame.domain.character.Hero;
+
 public class EmptyCell extends Cell {
 
     public EmptyCell(int number, int boardId) {
@@ -9,5 +11,10 @@ public class EmptyCell extends Cell {
     @Override
     public String toString() {
         return "C'est une case vide";
+    }
+
+    @Override
+    public StringBuilder interact(Hero hero) {
+        return null;
     }
 }
