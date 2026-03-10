@@ -4,87 +4,122 @@ import fr.neri.brumelame.dao.BoardDAO;
 import fr.neri.brumelame.dao.CellDAO;
 import fr.neri.brumelame.dao.EnemyDAO;
 import fr.neri.brumelame.dao.EquipmentDAO;
-import fr.neri.brumelame.domain.enemy.Enemy;
-import fr.neri.brumelame.domain.equipment.Equipment;
+
 import fr.neri.brumelame.game.cell.*;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Board {
+
+    private static final int BOARD_SIZE = 64;
+
     private int id;
     private List<Cell> cells;
-    private  int size;
     private String name;
     private EnemyDAO enemyDAO;
     private CellDAO cellDAO;
     private EquipmentDAO equipmentDAO;
+    private BoardDAO boardDAO;
 
-    public Board(String name, int size ) {
-        this.cells = new ArrayList<Cell>();
-        this.size = size;
+    // Positions :
+    List<Integer> DRAGON_CELLS = new ArrayList<>(Arrays.asList(45, 52, 56, 62,63));
+    List<Integer> WIZARD_CELLS = new ArrayList<>(Arrays.asList(10, 20, 25, 32, 35, 36, 37, 40, 44, 47,57,58));
+    List<Integer> GOBELIN_CELLS = new ArrayList<>(Arrays.asList(3, 6, 9, 12, 15, 18, 21, 24, 27, 30));
+
+    List<Integer> OFF_1_CELLS = new ArrayList<>(Arrays.asList(2, 11, 38, 1, 4, 23));
+    List<Integer> OFF_2_CELLS = new ArrayList<>(Arrays.asList(19, 26, 42, 53, 48, 49,60));
+    List<Integer> DEF_1_CELLS = new ArrayList<>(Arrays.asList(5, 22, 8, 17,61));
+    List<Integer> CON_1_CELLS = new ArrayList<>(Arrays.asList(7, 13, 31, 33, 39, 43));
+    List<Integer> CON_2_CELLS = new ArrayList<>(Arrays.asList(28, 41));
+
+
+    public Board(String name) {
+        this.cells = new ArrayList<Cell>(64);
         this.name = name;
         this.enemyDAO = new EnemyDAO();
         this.cellDAO = new CellDAO();
         this.equipmentDAO = new EquipmentDAO();
-    }
-
-    public Board(String name) { // Second constructeur avec taille par défaut
-        this(name, 64); // taille par défaut
+        this.boardDAO = new BoardDAO();
     }
 
     public Board() { // Constructeur avec date et heure du jour par défaut
-        this(LocalDate.now().format(DateTimeFormatter.ofPattern("dd_MM_yyyy")), 64);
+        this(LocalDate.now().format(DateTimeFormatter.ofPattern("dd_MM_yyyy")));
     }
 
-    public void initialize(){
-        BoardDAO boardDAO = new BoardDAO();
+    public void initialize() {
+
         int id = boardDAO.create(this);
-        if (id >0) this.setId(id);
+        if (id > 0) this.setId(id);
 
-        EmptyCell depart = new EmptyCell(0, this.id);
-        depart.setId(cellDAO.create(depart));
-        cells.add(depart);
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            EmptyCell emptyCell = new EmptyCell(i, this.id);
+            emptyCell.setId(cellDAO.create(emptyCell));
+            cells.add(emptyCell);
+        }
 
     }
+
     public void initializeCells(String heroClasse) {
-        Enemy sorcier = enemyDAO.find(1);
-        Enemy gobelin = enemyDAO.find(2);
-        Enemy dragon = enemyDAO.find(3);
-        Equipment equipOffNiv1 = equipmentDAO.findByHeroClasseAndNivAndType(heroClasse,1,"ATTACK");
-        Equipment equipOffNiv2 = equipmentDAO.findByHeroClasseAndNivAndType(heroClasse,2,"ATTACK");
 
-        addEnemyCell(sorcier,1);
-        addEnemyCell(gobelin,2);
-        addEquipmentCell(equipOffNiv1,3);
-        addEnemyCell(dragon,4);
+        for (int numberCell : DRAGON_CELLS) {
+            addEnemyCell(3, numberCell);
+        }
+        for (int numberCell : WIZARD_CELLS) {
+            addEnemyCell(1, numberCell);
+        }
+        for (int numberCell : GOBELIN_CELLS) {
+            addEnemyCell(1, numberCell);
+        }
 
+        for (int numberCell : OFF_1_CELLS) {
+            addEquipmentCell(1, heroClasse, "ATTACK", numberCell);
+            ;
+        }
+        for (int numberCell : OFF_2_CELLS) {
+            addEquipmentCell(2, heroClasse, "ATTACK", numberCell);
+            ;
+        }
+        for (int numberCell : DEF_1_CELLS) {
+            addEquipmentCell(1, heroClasse, "DEFENSE", numberCell);
+            ;
+        }
+
+        for (int numberCell : CON_1_CELLS) {
+            addEquipmentCell(1, heroClasse, "CONSUMABLE", numberCell);
+            ;
+        }
+        for (int numberCell : CON_2_CELLS) {
+            addEquipmentCell(1, heroClasse, "CONSUMABLE", numberCell);
+            ;
+        }
+        debugPrintBoard();
 
     }
 
-    private void addEnemyCell(Enemy enemy, int position){
-        EnemyCell cell = new EnemyCell(position, this.id, enemy);
+    private void addEnemyCell(int idEnemy, int position) {
+
+        EnemyCell cell = new EnemyCell(position, this.id, enemyDAO.find(idEnemy));
         cell.setId(cellDAO.create(cell));
-        cells.add(cell);
+        cells.set(position, cell);
     }
-    private void addEquipmentCell(Equipment equipment, int position) {
-        EquipmentCell cell = new EquipmentCell(position, this.id, equipment);
+
+    private void addEquipmentCell(int niv, String heroClasse, String type, int position) {
+        EquipmentCell cell = new EquipmentCell(position, this.id,
+                equipmentDAO.findByHeroClasseAndNivAndType(heroClasse, niv, type));
         cell.setId(cellDAO.create(cell));
-        cells.add(cell);
+        cells.set(position, cell);
     }
 
     public Cell getCell(int position) {
         return cells.get(position);
     }
 
-    public int getFinalCell() {
-        return size;
-    }
-
-    public int getSize() {
-        return size;
+    public int getNumberFinalCell() {
+        return cells.size() - 1;
     }
 
     public int getId() {
@@ -99,17 +134,41 @@ public class Board {
         return name;
     }
 
-    @Override
-    public String toString() {
-        return "Board{" +
-                "id=" + id +
-                ", cells=" + cells +
-                ", size=" + size +
-                ", name='" + name + '\'' +
-                '}';
-    }
-
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void debugPrintBoard() {
+        if (cells == null || cells.isEmpty()) {
+            System.out.println("Board vide ou non initialise.");
+            return;
+        }
+
+        System.out.println("Board #" + id + " - " + name);
+        System.out.println("Legend: __=Empty, EN=Enemy, EQ=Equipment");
+
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            Cell cell = i < cells.size() ? cells.get(i) : null;
+            System.out.printf("[%02d:%s] ", i, getDebugCellCode(cell));
+
+            if ((i + 1) % 8 == 0) {
+                System.out.println();
+            }
+        }
+    }
+       private String getDebugCellCode(Cell cell) {
+        if (cell == null) {
+            return "??";
+        }
+        if (cell instanceof EnemyCell) {
+            return "EN";
+        }
+        if (cell instanceof EquipmentCell) {
+            return "EQ";
+        }
+        if (cell instanceof EmptyCell) {
+            return "__";
+        }
+        return "??";
     }
 }

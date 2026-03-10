@@ -1,5 +1,6 @@
 package fr.neri.brumelame.dao;
 
+import fr.neri.brumelame.domain.equipment.ConsumableEquipment;
 import fr.neri.brumelame.domain.equipment.Equipment;
 import fr.neri.brumelame.domain.equipment.OffensiveEquipment;
 import fr.neri.brumelame.domain.equipment.DefensiveEquipment;
@@ -17,60 +18,6 @@ public class EquipmentDAO extends DAO<Equipment> {
 
     public EquipmentDAO() {
         super();
-    }
-
-
-    public boolean create(Equipment equipment) {
-        String sql = """
-            INSERT INTO equipments (type, name, category, description, bonus)
-            VALUES (?, ?, ?, ?, ?)
-        """;
-
-        try (PreparedStatement ps = conn.getConnection().prepareStatement(sql)) {
-            ps.setString(1, equipment.getType());
-            ps.setString(2, equipment.getName());
-            ps.setString(3, equipment.getCategory());
-            ps.setString(4, equipment.getDescription());
-            ps.setInt(5, equipment.getBonus());
-
-            return ps.executeUpdate() > 0;
-        } catch (SQLException e) {
-            return false;
-        }
-    }
-
-
-    public boolean delete(Equipment equipment) {
-        String sql = "DELETE FROM equipments WHERE id = ?";
-
-        try (PreparedStatement ps = conn.getConnection().prepareStatement(sql)) {
-            ps.setInt(1, equipment.getId());
-            return ps.executeUpdate() > 0;
-        } catch (SQLException e) {
-            return false;
-        }
-    }
-
-
-    public boolean update(Equipment equipment) {
-        String sql = """
-            UPDATE equipments 
-            SET type = ?, name = ?, category = ?, description = ?, bonus = ?
-            WHERE id = ?
-        """;
-
-        try (PreparedStatement ps = conn.getConnection().prepareStatement(sql)) {
-            ps.setString(1, equipment.getType());
-            ps.setString(2, equipment.getName());
-            ps.setString(3, equipment.getCategory());
-            ps.setString(4, equipment.getDescription());
-            ps.setInt(5, equipment.getBonus());
-            ps.setInt(6, equipment.getId());
-
-            return ps.executeUpdate() > 0;
-        } catch (SQLException e) {
-            return false;
-        }
     }
 
 
@@ -132,6 +79,7 @@ public class EquipmentDAO extends DAO<Equipment> {
                 switch(type){
                     case "ATTACK" ->   equipment = new OffensiveEquipment(type, name, category, description, bonus);
                     case "DEFENSE" ->   equipment = new DefensiveEquipment(type, name, category, description, bonus);
+                    case "CONSUMABLE" -> equipment = new ConsumableEquipment(type, name, category, description, bonus);
                     default -> {
                         return null;
                     }

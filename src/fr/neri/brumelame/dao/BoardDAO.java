@@ -10,11 +10,11 @@ public class BoardDAO extends DAO<Board> {
 
 
     public int create(Board board) {
-        String sql = "INSERT INTO boards (size, name) VALUES (?,?)";
+        String sql = "INSERT INTO boards (name) VALUES (?)";
 
         try (PreparedStatement ps = conn.getConnection().prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
-            ps.setInt(1, board.getSize());
-            ps.setString(2, board.getName()); 
+
+            ps.setString(1, board.getName());
 
             if (ps.executeUpdate() > 0) {
                 try (ResultSet rs = ps.getGeneratedKeys()) {
@@ -50,9 +50,8 @@ public class BoardDAO extends DAO<Board> {
                 }
 
                 String name = rs.getString("name");
-                int size = rs.getInt("size");
 
-                Board board = new Board(name, size);
+                Board board = new Board(name);
                 board.setId(id);
 
 
@@ -71,13 +70,13 @@ public class BoardDAO extends DAO<Board> {
         if (board == null) return false;
         if (board.getId() < 1) return false;
 
-        String sql = "UPDATE boards SET size = ?, name = ? WHERE id = ?";
+        String sql = "UPDATE boards SET name = ? WHERE id = ?";
 
         try (PreparedStatement ps = conn.getConnection().prepareStatement(sql)) {
 
-            ps.setInt(1, board.getSize());
-            ps.setString(2, board.getName());
-            ps.setInt(3, board.getId());
+
+            ps.setString(1, board.getName());
+            ps.setInt(2, board.getId());
 
             int edited = ps.executeUpdate();
             return edited == 1;

@@ -51,11 +51,11 @@ public class Game {
      */
     public Game() {
         this.menu = new Menu();
-        this.dice = new Dice(1, 1);
-        this.board = new Board("test", 4);
-        equipmentDAO = new EquipmentDAO();
-        heroClassesDAO = new HeroClassesDAO();
-        heroDAO = new HeroDAO();
+        this.dice = new Dice(1, 6);
+        this.board = new Board();
+        this.equipmentDAO = new EquipmentDAO();
+        this.heroClassesDAO = new HeroClassesDAO();
+        this.heroDAO = new HeroDAO();
 
     }
 
@@ -118,16 +118,17 @@ public class Game {
             int choice = menu.askCharacterMenuChoice();
 
             switch (choice) {
-                case 1 -> menu.printCharacter(hero);
-                case 2 -> hero.setName(menu.askNameCharacter());
-                case 3 -> {
-                    mainMenu();
-                    return;
-                }
-                case 4 -> {
+                case 1 -> {
                     play();
                     return;
                 }
+                case 2 -> menu.printCharacter(hero);
+                case 3 -> hero.setName(menu.askNameCharacter());
+                case 4 -> {
+                    mainMenu();
+                    return;
+                }
+
                 case 5 -> {
                     menu.quit();
                     return;
@@ -189,6 +190,7 @@ public class Game {
 
         while (!gameOver() && !finishGame()) {
 
+
             int choice = menu.askAction(playerPosition, this.hero);
             switch (choice) {
                 case 1 -> moveCharacter();
@@ -196,9 +198,12 @@ public class Game {
             }
 
         }
-        ;
 
-        if (gameOver()) menu.defeat();
+
+        if (gameOver()) {
+            menu.defeat();
+            return;
+        }
         if (finishGame()) menu.end();
 
     }
@@ -211,10 +216,13 @@ public class Game {
         int diceResult = dice.roll();
         playerPosition += diceResult;
 
+        if (playerPosition > board.getNumberFinalCell()) playerPosition = board.getNumberFinalCell();
+
+        menu.printMoveHero(diceResult, playerPosition);
+
         hero.setCellId(board.getCell(playerPosition).getId());
 
         this.interactCellHero(playerPosition);
-
 
     }
 
@@ -229,7 +237,7 @@ public class Game {
     }
 
     private boolean finishGame() {
-        return playerPosition >= board.getFinalCell();
+        return playerPosition == board.getNumberFinalCell();
     }
 
 

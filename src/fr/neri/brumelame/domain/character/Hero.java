@@ -19,6 +19,8 @@ public abstract class Hero {
     private String name;
     /** Points de vie du personnage. */
     private int health;
+
+    private int maxHealth;
     /** Valeur d'attaque de base du personnage. */
     private int attack;
     /** Équipement offensif actuellement porté. */
@@ -43,6 +45,7 @@ public abstract class Hero {
         this.heroClass = heroClass;
         this.name = name;
         this.health = health;
+        this.maxHealth = health;
         this.attack = attack;
         this.offEquip = offEquip;
         this.defEquip = null;
@@ -159,7 +162,15 @@ public abstract class Hero {
         return this.attack + this.offEquip.getBonus();
     }
     public void receivedDamage(int damage){
+        if (this.defEquip != null){
+            damage = Math.max(damage - defEquip.getBonus() , 0);
+        }
+
         this.health -= damage;
+    }
+    public void getHeal (int heal){
+        this.health += heal;
+        if (this.health > this.maxHealth) this.health = this.maxHealth;
     }
     /**
      * Retourne une représentation textuelle du personnage.

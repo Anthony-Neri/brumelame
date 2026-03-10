@@ -25,23 +25,70 @@ public class EnemyCell extends Cell {
 
 
     public StringBuilder interact(Hero hero) {
-        StringBuilder fight = new StringBuilder("Vous êtes attaquer par : " + enemy.getName()+ " ! \n");
+        StringBuilder fight = new StringBuilder();
+        int round = 1;
 
-        while (this.enemy.getHealth() > 0 && hero.getHealth() > 0) {
-            fight.append("Vous infligez ").append(hero.getDamage()).append(" au ").append(enemy.getName()+ " ! \n");
-            enemy.receivedDamage(hero.getDamage());
+        fight.append("\n");
+        fight.append("╔══════════════════════════════════════╗\n");
+        fight.append("║            DÉBUT DU COMBAT           ║\n");
+        fight.append("╠══════════════════════════════════════╣\n");
+        fight.append(String.format("║ Héro   : %-27s ║%n", hero.getName()));
+        fight.append(String.format("║ Ennemi : %-27s ║%n", enemy.getName()));
+        fight.append("╚══════════════════════════════════════╝\n\n");
+
+        while (enemy.getHealth() > 0 && hero.getHealth() > 0) {
+            fight.append("──────────── Tour ").append(round).append(" ────────────\n");
+
+            int heroDamage = hero.getDamage();
+            enemy.receivedDamage(heroDamage);
+            fight.append("⚔ ")
+                    .append(hero.getName())
+                    .append(" inflige ")
+                    .append(heroDamage)
+                    .append(" dégâts à ")
+                    .append(enemy.getName())
+                    .append(".\n");
+
+            fight.append("   ")
+                    .append(enemy.getName())
+                    .append(" : ")
+                    .append(Math.max(enemy.getHealth(), 0))
+                    .append(" PV restants\n");
 
             if (enemy.getHealth() > 0) {
-                fight.append("Le " + enemy.getName() + " vous inflige " + enemy.getAttack() + " ! \n");
-                hero.receivedDamage(enemy.getAttack());
+                int enemyDamage = enemy.getAttack();
+                int defenseBonus = hero.getDefEquip() != null ? hero.getDefEquip().getBonus() : 0;
+                int finalDamage = Math.max(enemyDamage - defenseBonus, 0); // permet de ne pas avoir de dégâts négatifs.
+
+                hero.receivedDamage(enemyDamage);
+
+                fight.append("🩸 ")
+                        .append(enemy.getName())
+                        .append(" inflige ")
+                        .append(finalDamage)
+                        .append(" dégâts à ")
+                        .append(hero.getName())
+                        .append(".\n");
+
+                fight.append("   ")
+                        .append(hero.getName())
+                        .append(" : ")
+                        .append(hero.getHealth())
+                        .append(" PV restants\n");
             }
 
+            fight.append("\n");
+            round++;
         }
+
+        fight.append("══════════════════════════════════════\n");
         if (hero.getHealth() <= 0) {
-            fight.append("Vous êtes mort ! \n");
-        }else {
-            fight.append("Vous avez vaincu le ").append(enemy.getName()).append(" ! \n");
+            fight.append(hero.getName()).append(" a été vaincu.\n");
+        } else {
+            fight.append(hero.getName()).append(" a vaincu ")
+                    .append(enemy.getName()).append(".\n");
         }
+        fight.append("══════════════════════════════════════\n");
 
         return fight;
     }

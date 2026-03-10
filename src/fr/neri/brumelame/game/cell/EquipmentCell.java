@@ -1,6 +1,8 @@
 package fr.neri.brumelame.game.cell;
 
 import fr.neri.brumelame.domain.character.Hero;
+import fr.neri.brumelame.domain.equipment.ConsumableEquipment;
+import fr.neri.brumelame.domain.equipment.DefensiveEquipment;
 import fr.neri.brumelame.domain.equipment.Equipment;
 import fr.neri.brumelame.domain.equipment.OffensiveEquipment;
 import fr.neri.brumelame.ui.Menu;
@@ -27,8 +29,20 @@ public class EquipmentCell extends Cell{
     public StringBuilder interact(Hero hero) {
         Menu menu = new Menu();
         int choice = menu.askEquipEquipement(this.equipement);
-        if (choice ==1) hero.setOffEquip((OffensiveEquipment) equipement);
+        String action = "Vous vous équipez de ";
+        if (choice == 1) {
+            if (this.equipement instanceof OffensiveEquipment equipement) {
+                hero.setOffEquip(equipement);
+            } else if (this.equipement instanceof DefensiveEquipment equipement) {
+                hero.setDefEquip(equipement);
+            } else if (this.equipement instanceof ConsumableEquipment equipement) {
 
-        return new StringBuilder("Vous vous équipez de " + getEquipment().getName());
+                hero.getHeal(equipement.getBonus());
+                action = "Vous utilisez ";
+            }
+            return new StringBuilder(action + getEquipment().getName());
+        }
+
+        return new StringBuilder("Vous laissez " + this.equipement.getName() + " à terre.");
     }
 }
