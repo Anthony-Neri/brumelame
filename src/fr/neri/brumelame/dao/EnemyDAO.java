@@ -11,10 +11,7 @@ import java.sql.SQLException;
 public class EnemyDAO extends DAO<Enemy> {
 
     public boolean create(Enemy enemy) {
-        String sql = """
-            INSERT INTO enemies (name, health, attack)
-            VALUES (?, ?, ?)
-        """;
+        String sql = "INSERT INTO enemies (name, health, attack) VALUES (?, ?, ?)";
 
         try (PreparedStatement ps = conn.getConnection().prepareStatement(sql)) {
             ps.setString(1, enemy.getName());
@@ -39,11 +36,7 @@ public class EnemyDAO extends DAO<Enemy> {
     }
 
     public boolean update(Enemy enemy) {
-        String sql = """
-            UPDATE enemies
-            SET name = ?, health = ?, attack = ?
-            WHERE id = ?
-        """;
+        String sql = "UPDATE enemies SET name = ?, health = ?, attack = ? WHERE id = ?";
         
         try (PreparedStatement ps = conn.getConnection().prepareStatement(sql)) {
             ps.setString(1, enemy.getName());

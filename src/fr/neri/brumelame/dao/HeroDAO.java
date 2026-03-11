@@ -15,11 +15,7 @@ import java.sql.Types;
 public class HeroDAO extends DAO<Hero> {
 
     public int create(Hero hero) {
-        String sql = """
-
-            INSERT INTO heroes (name, type, health, attack, id_off_equip, id_def_equip, id_cell, id_board)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-        """;
+        String sql = "INSERT INTO heroes (name, type, health, attack, id_off_equip, id_def_equip, id_cell, id_board) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement ps = conn.getConnection().prepareStatement(sql,PreparedStatement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, hero.getName());
@@ -67,12 +63,7 @@ public class HeroDAO extends DAO<Hero> {
     }
 
     public boolean update(Hero hero) {
-        String sql = """
-            UPDATE heroes 
-            SET name = ?, type = ?, health = ?, attack = ?, 
-                id_off_equip = ?, id_def_equip = ?, id_cell = ?, id_board = ?
-            WHERE id = ?
-        """;
+        String sql = "UPDATE heroes SET name = ?, type = ?, health = ?, attack = ?, id_off_equip = ?, id_def_equip = ?, id_cell = ?, id_board = ? WHERE id = ?";
         
         try (PreparedStatement ps = conn.getConnection().prepareStatement(sql)) {
             ps.setString(1, hero.getName());

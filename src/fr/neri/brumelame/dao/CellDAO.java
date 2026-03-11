@@ -16,10 +16,7 @@ import java.sql.Types;
 public class CellDAO extends DAO<Cell> {
 
     public int create(Cell cell) {
-        String sql = """
-            INSERT INTO cells (number, id_board, id_equipement, id_ennemy)
-            VALUES (?, ?, ?, ?)
-        """;
+        String sql = "INSERT INTO cells (number, id_board, id_equipement, id_ennemy) VALUES (?, ?, ?, ?)";
 
         try (PreparedStatement ps = conn.getConnection().prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, cell.getNumber());
@@ -60,11 +57,7 @@ public class CellDAO extends DAO<Cell> {
     }
 
     public boolean update(Cell cell) {
-        String sql = """
-            UPDATE cells
-            SET number = ?, id_board = ?, id_equipement = ?, id_ennemy = ?
-            WHERE id = ?
-        """;
+        String sql = "UPDATE cells SET number = ?, id_board = ?, id_equipement = ?, id_ennemy = ? WHERE id = ?";
         
         try (PreparedStatement ps = conn.getConnection().prepareStatement(sql)) {
             ps.setInt(1, cell.getNumber());

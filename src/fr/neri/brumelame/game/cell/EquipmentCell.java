@@ -11,8 +11,8 @@ public class EquipmentCell extends Cell{
     private Equipment equipement;
 
     public EquipmentCell(int number, int boardId, Equipment equipement) {
-        this.equipement = equipement;
         super(number,boardId);
+        this.equipement = equipement;
     }
 
     @Override
@@ -31,13 +31,12 @@ public class EquipmentCell extends Cell{
         int choice = menu.askEquipEquipement(this.equipement);
         String action = "Vous vous équipez de ";
         if (choice == 1) {
-            if (this.equipement instanceof OffensiveEquipment equipement) {
-                hero.setOffEquip(equipement);
-            } else if (this.equipement instanceof DefensiveEquipment equipement) {
-                hero.setDefEquip(equipement);
-            } else if (this.equipement instanceof ConsumableEquipment equipement) {
-
-                hero.getHeal(equipement.getBonus());
+            if (this.equipement instanceof OffensiveEquipment) {
+                hero.setOffEquip((OffensiveEquipment) this.equipement);
+            } else if (this.equipement instanceof DefensiveEquipment) {
+                hero.setDefEquip((DefensiveEquipment) this.equipement);
+            } else if (this.equipement instanceof ConsumableEquipment) {
+                hero.getHeal(this.equipement.getBonus());
                 action = "Vous utilisez ";
             }
             return new StringBuilder(action + getEquipment().getName());
