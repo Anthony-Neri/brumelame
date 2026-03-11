@@ -8,6 +8,7 @@ import fr.neri.brumelame.domain.equipment.OffensiveEquipment;
 import fr.neri.brumelame.game.cell.Cell;
 
 import java.util.Scanner;
+import java.util.List;
 
 public class Menu {
 
@@ -40,7 +41,18 @@ public class Menu {
 
     public String askCharacterType() {
         System.out.println();
-        return askString("Choisis ta classe (Wizard, Warrior) :");
+
+        String heroTypes = "";
+        try {
+            List<Class<?>> classes = ClassFinder.getClasses("fr.neri.brumelame.domain.character");
+            for (Class<?> c : classes) {
+                if (Hero.class.isAssignableFrom(c) && c != Hero.class) {
+                    heroTypes += c.getSimpleName() +", ";
+                }
+            }
+        } catch (Exception $e) {}
+
+        return askString("Choisis ta classe parmis ("+ heroTypes.substring(0, heroTypes.length() -2) +") : ");
     }
 
     public int askCharacterMenuChoice() {
