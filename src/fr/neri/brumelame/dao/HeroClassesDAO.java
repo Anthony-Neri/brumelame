@@ -12,7 +12,7 @@ public class HeroClassesDAO extends DAO<HeroClasse> {
         String sql = "Select * from heroclasses WHERE name = ?";
 
         try(PreparedStatement ps = conn.getConnection().prepareStatement(sql)){
-            ps.setString(1,name.toUpperCase());
+            ps.setString(1,name);
 
             try (ResultSet rs = ps.executeQuery()){
                 if (!rs.next()){

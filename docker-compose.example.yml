@@ -4,6 +4,7 @@ services:
     container_name: dnd_database
     volumes:
       - data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
     environment:
       MYSQL_ROOT_PASSWORD:
       MYSQL_DATABASE: example
