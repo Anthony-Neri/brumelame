@@ -51,13 +51,16 @@ public class Board {
     }
 
     public void initialize() {
-
-        int id = boardDAO.create(this);
-        if (id > 0) this.setId(id);
+        try {
+            int id = boardDAO.create(this);
+            if (id > 0) this.setId(id);
+        }catch (Exception $e) {}
 
         for (int i = 0; i < BOARD_SIZE; i++) {
             EmptyCell emptyCell = new EmptyCell(i, this.id);
-            emptyCell.setId(cellDAO.create(emptyCell));
+            try {
+                emptyCell.setId(cellDAO.create(emptyCell));
+            } catch (Exception e) {}
             cells.add(emptyCell);
         }
 
