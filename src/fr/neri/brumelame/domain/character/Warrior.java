@@ -4,6 +4,9 @@ import fr.neri.brumelame.domain.equipment.OffensiveEquipment;
 
 public class Warrior extends Hero {
 
+    public Warrior () {
+    }
+
     public Warrior (String name, int health, int attack){
         super(name, health, attack, null);
     }

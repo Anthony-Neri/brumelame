@@ -30,6 +30,9 @@ public abstract class Hero {
     /** ID de la cellule. */
     private int cellId;
 
+    public Hero() {
+    }
+
     /**
      * Construit un personnage avec ses caractéristiques principales.
      *
@@ -147,7 +150,7 @@ public abstract class Hero {
     }
 
     public int getDamage(){
-        return this.attack + this.offEquip.getBonus();
+        return this.attack + (this.offEquip != null ? this.offEquip.getBonus() : 0);
     }
     public void receivedDamage(int damage){
         if (this.defEquip != null){

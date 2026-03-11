@@ -169,12 +169,23 @@ public class Game {
             heroClasse = new HeroClasse("", 10, 1);
         }
 
-        if (Objects.equals(type, "Wizard")) {
-            hero = new Wizard(name, heroClasse.getHealth(), heroClasse.getAttack(), equip);
-        } else {
-            hero = new Warrior(name, heroClasse.getHealth(), heroClasse.getAttack(), equip);
+        Class c = null;
+        try {
+            c = Class.forName("fr.neri.brumelame.domain.character." + type);
+            hero = (Hero) c.newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
+        // if (Objects.equals(type, "Wizard")) {
+        //     hero = new Wizard(name, heroClasse.getHealth(), heroClasse.getAttack(), equip);
+        // } else {
+        //     hero = new Warrior(name, heroClasse.getHealth(), heroClasse.getAttack(), equip);
+        // }
      
+        hero.setName(name);
+        hero.setHealth(heroClasse.getHealth());
+        hero.setAttack(heroClasse.getAttack());
         hero.setBoardId(board.getId());
         hero.setCellId(board.getCell(0).getId());
         try {
