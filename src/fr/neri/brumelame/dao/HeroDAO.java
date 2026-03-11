@@ -23,7 +23,7 @@ public class HeroDAO extends DAO<Hero> {
 
         try (PreparedStatement ps = conn.getConnection().prepareStatement(sql,PreparedStatement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, hero.getName());
-            ps.setString(2, hero.getHeroClass());
+            ps.setString(2, hero.getClass().getSimpleName().toUpperCase());
             ps.setInt(3, hero.getHealth());
             ps.setInt(4, hero.getAttack());
 
@@ -76,7 +76,7 @@ public class HeroDAO extends DAO<Hero> {
         
         try (PreparedStatement ps = conn.getConnection().prepareStatement(sql)) {
             ps.setString(1, hero.getName());
-            ps.setString(2, hero.getHeroClass());
+            ps.setString(2, hero.getClass().getName());
             ps.setInt(3, hero.getHealth());
             ps.setInt(4, hero.getAttack());
 

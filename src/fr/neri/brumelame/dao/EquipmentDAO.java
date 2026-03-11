@@ -63,7 +63,7 @@ public class EquipmentDAO extends DAO<Equipment> {
         try (PreparedStatement ps = conn.getConnection().prepareStatement(sql)) {
             ps.setString(2, heroClasse);
             ps.setInt(1, niv);
-            ps.setString(3, type);
+            ps.setString(3, type.toUpperCase());
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (!rs.next()) {

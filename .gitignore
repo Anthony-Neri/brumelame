@@ -33,3 +33,5 @@ bin/
 *.iml
 
 /src/resources/db.properties
+
+docker-compose.yml

@@ -6,12 +6,13 @@ import fr.neri.brumelame.domain.equipment.OffensiveEquipment;
 public class Wizard extends Hero {
 
     public Wizard (String name, int health, int attack){
-        super("WIZARD", name, health, attack, null);
+        super(name, health, attack, null);
     }
     public Wizard(String name, int health, int attack , OffensiveEquipment equipment) {
 
-        super("WIZARD", name, health, attack, equipment);
+        super(name, health, attack, equipment);
     }
+    public Wizard(){}
 
 
 }

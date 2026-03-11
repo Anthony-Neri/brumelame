@@ -13,8 +13,6 @@ import fr.neri.brumelame.domain.equipment.OffensiveEquipment;
 public abstract class Hero {
 
     private int id;
-    /** Classe du personnage (ex. Guerrier, Magicien). */
-    private String heroClass;
     /** Nom du personnage. */
     private String name;
     /** Points de vie du personnage. */
@@ -35,14 +33,14 @@ public abstract class Hero {
     /**
      * Construit un personnage avec ses caractéristiques principales.
      *
-     * @param heroClass classe du personnage
+
      * @param name nom du personnage
      * @param health points de vie
      * @param attack valeur d'attaque
      * @param offEquip équipement offensif initial
      */
-    public Hero(String heroClass, String name, int health, int attack, OffensiveEquipment offEquip) {
-        this.heroClass = heroClass;
+    public Hero( String name, int health, int attack, OffensiveEquipment offEquip) {
+
         this.name = name;
         this.health = health;
         this.maxHealth = health;
@@ -50,6 +48,7 @@ public abstract class Hero {
         this.offEquip = offEquip;
         this.defEquip = null;
     }
+    public Hero(){}
 
     // GUETTERS et SETTERS
     
@@ -59,14 +58,6 @@ public abstract class Hero {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public String getHeroClass() {
-        return heroClass;
-    }
-
-    public void setHeroClass(String heroClass) {
-        this.heroClass = heroClass;
     }
 
     public String getName() {
@@ -136,7 +127,7 @@ public abstract class Hero {
     //    Interaction
     
     public int getDamage(){
-        return this.attack + this.offEquip.getBonus();
+        return this.attack + (this.offEquip != null ? this.offEquip.getBonus() : 0);
     }
     public void receivedDamage(int damage){
         if (this.defEquip != null){
@@ -157,7 +148,7 @@ public abstract class Hero {
      */
     public String toString(){
         return this.name +
-                " | Classe : " + this.heroClass +
+                " | Classe : " + this.getClass().getName() +
                 " | Points de vie : " + this.health +
                 " | Attaque : " + this.attack +
                 " | Équipement offensif : " + this.offEquip +

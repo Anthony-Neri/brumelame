@@ -73,13 +73,11 @@ public class Game {
 
         board.initialize();
 
-
-        int choice = menu.askCharacterType();
-        String type = (choice == 1) ? "wizard" : "warrior";
-        this.hero = createHero(type, menu.askNameCharacter());
+        String choice = menu.askCharacterType();
+        this.hero = createHero(choice, menu.askNameCharacter());
 
         try {
-            board.initializeCells(hero.getHeroClass());
+            board.initializeCells(hero.getClass().getSimpleName());
         } catch (Exception e) {}
         characterMenu();
 
@@ -145,32 +143,57 @@ public class Game {
      * sinon une instance de {@link Warrior}
      */
     public Hero createHero(String type, String name) {
+        String normalizedType = type == null ? "" : type.trim().toLowerCase();
 
-
-        HeroClasse heroClasse = null;
-        OffensiveEquipment equip = null;
-        Hero hero = null;
+        HeroClasse heroClasse;
 
         try {
-            equip = (OffensiveEquipment) equipmentDAO.findByHeroClasseAndNivAndType(type.toUpperCase(),0, "ATTACK");
-        } catch (Exception $e) {}
-
-        try {
-            heroClasse = heroClassesDAO.findByName(type);
-        } catch (Exception $e) {
-            heroClasse = new HeroClasse("", 10, 1);
+            heroClasse = heroClassesDAO.findByName(normalizedType);
+        } catch (Exception e) {
+            throw new IllegalStateException("Classe de héros introuvable : " + normalizedType, e);
         }
-        if (Objects.equals(type, "wizard")) {
-            hero = new Wizard(name, heroClasse.getHealth(), heroClasse.getAttack(), equip);
-        } else {
-            hero = new Warrior(name, heroClasse.getHealth(), heroClasse.getAttack(), equip);
+
+        OffensiveEquipment equip = null;
+        try {
+            equip = (OffensiveEquipment) equipmentDAO.findByHeroClasseAndNivAndType(
+                    normalizedType, 0, "ATTACK"
+            );
+        } catch (Exception e) {
+            // équipement optionnel
+        }
+
+        Hero hero;
+        try {
+            String className = normalizedType.substring(0, 1).toUpperCase()
+                    + normalizedType.substring(1);
+
+            Class<?> clazz = Class.forName("fr.neri.brumelame.domain.character." + className);
+
+            if (!Hero.class.isAssignableFrom(clazz)) { // Vérifie que la classe étend bien Hero
+                throw new IllegalStateException(className + " n'est pas un Hero");
+            }
+
+            hero = (Hero) clazz.getDeclaredConstructor().newInstance(); // Crée une instance de la classe correspondante
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Type de héros invalide : " + type, e);
+        }
+
+        hero.setName(name);
+        hero.setHealth(heroClasse.getHealth());
+        hero.setAttack(heroClasse.getAttack());
+
+        if (equip != null) {
+            hero.setOffEquip(equip);
         }
 
         hero.setBoardId(board.getId());
         hero.setCellId(board.getCell(0).getId());
+
         try {
             hero.setId(heroDAO.create(hero));
-        } catch (Exception $e) {}
+        } catch (Exception e) {
+            throw new IllegalStateException("Impossible de sauvegarder le héros", e);
+        }
 
         return hero;
     }
