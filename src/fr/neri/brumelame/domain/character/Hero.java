@@ -172,6 +172,15 @@ public abstract class Hero {
         this.health += heal;
         if (this.health > this.maxHealth) this.health = this.maxHealth;
     }
+
+    public int getMaxHealth() {
+        return maxHealth;
+    }
+
+    public void setMaxHealth(int maxHealth) {
+        this.maxHealth = maxHealth;
+    }
+
     /**
      * Retourne une représentation textuelle du personnage.
      *

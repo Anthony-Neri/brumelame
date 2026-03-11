@@ -6,9 +6,9 @@ import fr.neri.brumelame.domain.enemy.Enemy;
 
 public abstract class Cell {
 
-    private int id;
-    private int number;
-    private int boardId;
+    protected int id;
+    protected int number;
+    protected int boardId;
 
     public Cell(int number, int boardId) {
         this.number = number;

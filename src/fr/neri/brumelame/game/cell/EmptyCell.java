@@ -15,6 +15,18 @@ public class EmptyCell extends Cell {
 
     @Override
     public StringBuilder interact(Hero hero) {
-        return null;
+
+        StringBuilder message = new StringBuilder();
+
+        if (this.number == 0){
+            message.append("Vous êtes sur la case de départ.");
+        }else {
+            message.append("Vous êtes arrivez sur une case vide, vous vous reposez ! ");
+            if (hero.getHealth() < hero.getMaxHealth()) {
+                hero.getHeal(1);
+                message.append("Et recouvrez un point de vie !");
+            }
+        }
+        return message ;
     }
 }

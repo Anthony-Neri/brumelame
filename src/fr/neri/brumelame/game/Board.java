@@ -77,24 +77,24 @@ public class Board {
 
         for (int numberCell : OFF_1_CELLS) {
             addEquipmentCell(1, heroClasse, "ATTACK", numberCell);
-            ;
+
         }
         for (int numberCell : OFF_2_CELLS) {
             addEquipmentCell(2, heroClasse, "ATTACK", numberCell);
-            ;
+
         }
         for (int numberCell : DEF_1_CELLS) {
             addEquipmentCell(1, heroClasse, "DEFENSE", numberCell);
-            ;
+
         }
 
         for (int numberCell : CON_1_CELLS) {
             addEquipmentCell(1, heroClasse, "CONSUMABLE", numberCell);
-            ;
+
         }
         for (int numberCell : CON_2_CELLS) {
             addEquipmentCell(1, heroClasse, "CONSUMABLE", numberCell);
-            ;
+
         }
 
 
