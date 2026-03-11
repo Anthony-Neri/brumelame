@@ -7,13 +7,11 @@ public class Warrior extends Hero {
 
     public Warrior (String name, int health, int attack){
 
-        String type = "warrior";
-        super(type, name, health, attack, null);
+        super("WARRIOR", name, health, attack, null);
     }
     public Warrior(String name, int health, int attack , OffensiveEquipment equipment) {
 
-        String type = "warrior";
-        super(type, name, health, attack, equipment);
+        super("WARRIOR", name, health, attack, equipment);
     }
 
 }

@@ -14,8 +14,8 @@ public class EnemyCell extends Cell {
     }
 
     public EnemyCell(int number, int boardId, Enemy enemy) {
-        this.enemy = enemy;
         super(number, boardId);
+        this.enemy = enemy;
     }
 
     @Override

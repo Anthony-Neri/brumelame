@@ -51,6 +51,8 @@ public abstract class Hero {
         this.defEquip = null;
     }
 
+    // GUETTERS et SETTERS
+    
     public int getId() {
         return id;
     }
@@ -59,66 +61,48 @@ public abstract class Hero {
         this.id = id;
     }
 
-    /**
-     * Retourne le nom du personnage.
-     *
-     * @return nom du personnage
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Retourne les points de vie du personnage.
-     *
-     * @return points de vie
-     */
-    public int getHealth() {
-        return health;
-    }
-
-    /**
-     * Retourne la valeur d'attaque du personnage.
-     *
-     * @return attaque
-     */
-    public int getAttack() {
-        return attack;
-    }
-
-    /**
-     * Retourne l'équipement offensif du personnage.
-     *
-     * @return équipement offensif
-     */
-    public OffensiveEquipment getOffEquip() {
-        return offEquip;
-    }
-
-    /**
-     * Modifie le nom du personnage.
-     *
-     * @param name nouveau nom
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    /**
-     * Modifie la valeur d'attaque du personnage.
-     *
-     * @param attack nouvelle valeur d'attaque
-     */
-    public void setAttack(int attack) {
-        this.attack = attack;
-    }
-
     public String getHeroClass() {
         return heroClass;
     }
 
     public void setHeroClass(String heroClass) {
         this.heroClass = heroClass;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getHealth() {
+        return health;
+    }
+
+    public void setHealth(int health) {
+        this.health = health;
+    }
+
+    public int getMaxHealth() {
+        return maxHealth;
+    }
+
+    public void setMaxHealth(int maxHealth) {
+        this.maxHealth = maxHealth;
+    }
+
+    public int getAttack() {
+        return attack;
+    }
+
+    public void setAttack(int attack) {
+        this.attack = attack;
+    }
+
+    public OffensiveEquipment getOffEquip() {
+        return offEquip;
     }
 
     public void setOffEquip(OffensiveEquipment offEquip) {
@@ -149,15 +133,8 @@ public abstract class Hero {
         this.cellId = cellId;
     }
 
-    /**
-     * Modifie les points de vie du personnage.
-     *
-     * @param health nouveaux points de vie
-     */
-    public void setHealth(int health) {
-        this.health = health;
-    }
-
+    //    Interaction
+    
     public int getDamage(){
         return this.attack + this.offEquip.getBonus();
     }
@@ -173,14 +150,6 @@ public abstract class Hero {
         if (this.health > this.maxHealth) this.health = this.maxHealth;
     }
 
-    public int getMaxHealth() {
-        return maxHealth;
-    }
-
-    public void setMaxHealth(int maxHealth) {
-        this.maxHealth = maxHealth;
-    }
-
     /**
      * Retourne une représentation textuelle du personnage.
      *
@@ -194,4 +163,5 @@ public abstract class Hero {
                 " | Équipement offensif : " + this.offEquip +
                 " | Équipement défensif : " + this.defEquip;
     }
+
 }

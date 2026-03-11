@@ -105,7 +105,7 @@ public class Menu {
         System.out.println(cell.toString());
 
     }
-    public int askEquipEquipement(Equipment equipment){
+    public int askEquipEquipment(Equipment equipment){
         String objetType ="";
         String bonus = "";
         String action = " Récupérer ? ";
@@ -150,7 +150,7 @@ public class Menu {
     public int askInt(String message, int minValue, int maxValue) {
 
         while (true) {
-            IO.println(message);
+            System.out.println(message);
 
             if (input.hasNextInt()) {
                 int value = input.nextInt();
@@ -169,7 +169,7 @@ public class Menu {
 
     public String askString(String message) {
 
-        IO.println(message);
+        System.out.println(message);
 
         return input.nextLine().trim();
 

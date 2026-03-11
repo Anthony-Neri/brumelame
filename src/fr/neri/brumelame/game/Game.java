@@ -7,10 +7,10 @@ import fr.neri.brumelame.domain.character.Hero;
 import fr.neri.brumelame.domain.character.HeroClasse;
 import fr.neri.brumelame.domain.character.Warrior;
 import fr.neri.brumelame.domain.character.Wizard;
-import fr.neri.brumelame.domain.enemy.Enemy;
+
 import fr.neri.brumelame.domain.equipment.OffensiveEquipment;
-import fr.neri.brumelame.game.cell.Cell;
-import fr.neri.brumelame.game.cell.EnemyCell;
+
+
 import fr.neri.brumelame.ui.Menu;
 
 import java.util.Locale;
@@ -25,38 +25,31 @@ import java.util.Objects;
  */
 public class Game {
 
-    /**
-     * Interface console de dialogue avec le joueur.
-     */
-    private Menu menu;
-    /**
-     * Personnage contrôlé par le joueur.
-     */
-    private Hero hero;
-    /**
-     * Dé utilisé pour les déplacements.
-     */
-    private Dice dice;
+    private final Menu menu;
+    private final Dice dice;
+    private final Board board;
+    private final EquipmentDAO equipmentDAO;
+    private final HeroClassesDAO heroClassesDAO;
+    private final HeroDAO heroDAO;
+
 
     private int playerPosition = 0;
+    private Hero hero;
 
-    private Board board;
-
-    private EquipmentDAO equipmentDAO;
-    private HeroClassesDAO heroClassesDAO;
-    private HeroDAO heroDAO;
-
-    /**
-     * Initialise une nouvelle partie avec un menu et un dé standard (1 à 6).
-     */
-    public Game() {
-        this.menu = new Menu();
-        this.dice = new Dice(1, 6);
-        this.board = new Board();
-        this.equipmentDAO = new EquipmentDAO();
-        this.heroClassesDAO = new HeroClassesDAO();
-        this.heroDAO = new HeroDAO();
-
+    public Game(
+            Menu menu,
+            Dice dice,
+            Board board,
+            EquipmentDAO equipmentDAO,
+            HeroClassesDAO heroClassesDAO,
+            HeroDAO heroDAO
+    ) {
+        this.menu = Objects.requireNonNull(menu);
+        this.dice = Objects.requireNonNull(dice);
+        this.board = Objects.requireNonNull(board);
+        this.equipmentDAO = Objects.requireNonNull(equipmentDAO);
+        this.heroClassesDAO = Objects.requireNonNull(heroClassesDAO);
+        this.heroDAO = Objects.requireNonNull(heroDAO);
     }
 
     /**

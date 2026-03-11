@@ -8,16 +8,16 @@ import fr.neri.brumelame.domain.equipment.OffensiveEquipment;
 import fr.neri.brumelame.ui.Menu;
 
 public class EquipmentCell extends Cell{
-    private Equipment equipement;
+    private Equipment equipment;
 
-    public EquipmentCell(int number, int boardId, Equipment equipement) {
-        this.equipement = equipement;
+    public EquipmentCell(int number, int boardId, Equipment equipment) {
+        this.equipment = equipment;
         super(number,boardId);
     }
 
     @Override
     public Equipment getEquipment() {
-        return equipement;
+        return equipment;
     }
 
     @Override
@@ -28,21 +28,21 @@ public class EquipmentCell extends Cell{
     @Override
     public StringBuilder interact(Hero hero) {
         Menu menu = new Menu();
-        int choice = menu.askEquipEquipement(this.equipement);
+        int choice = menu.askEquipEquipment(this.equipment);
         String action = "Vous vous équipez de ";
         if (choice == 1) {
-            if (this.equipement instanceof OffensiveEquipment equipement) {
-                hero.setOffEquip(equipement);
-            } else if (this.equipement instanceof DefensiveEquipment equipement) {
-                hero.setDefEquip(equipement);
-            } else if (this.equipement instanceof ConsumableEquipment equipement) {
+            if (this.equipment instanceof OffensiveEquipment ) {
+                hero.setOffEquip((OffensiveEquipment) this.equipment);
+            } else if (this.equipment instanceof DefensiveEquipment ) {
+                hero.setDefEquip((DefensiveEquipment) this.equipment);
+            } else if (this.equipment instanceof ConsumableEquipment) {
 
-                hero.getHeal(equipement.getBonus());
+                hero.getHeal(this.equipment.getBonus());
                 action = "Vous utilisez ";
             }
             return new StringBuilder(action + getEquipment().getName());
         }
 
-        return new StringBuilder("Vous laissez " + this.equipement.getName() + " à terre.");
+        return new StringBuilder("Vous laissez " + this.equipment.getName() + " à terre.");
     }
 }
