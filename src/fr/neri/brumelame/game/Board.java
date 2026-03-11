@@ -26,13 +26,13 @@ public class Board {
     private BoardDAO boardDAO;
 
     // Positions :
-    List<Integer> DRAGON_CELLS = new ArrayList<>(Arrays.asList(45, 52, 56, 62,63));
-    List<Integer> WIZARD_CELLS = new ArrayList<>(Arrays.asList(10, 20, 25, 32, 35, 36, 37, 40, 44, 47,57,58));
-    List<Integer> GOBELIN_CELLS = new ArrayList<>(Arrays.asList(3, 6, 9, 12, 15, 18, 21, 24, 27, 30));
+    List<Integer> DRAGON_CELLS = new ArrayList<>(Arrays.asList(45, 52, 56, 62,63,11));
+    List<Integer> WIZARD_CELLS = new ArrayList<>(Arrays.asList(10, 20, 25, 32, 35, 36, 37, 40, 44, 47,57,58,60,8));
+    List<Integer> GOBELIN_CELLS = new ArrayList<>(Arrays.asList(3, 6, 9, 12, 15, 18, 21, 24, 27, 30,49));
 
-    List<Integer> OFF_1_CELLS = new ArrayList<>(Arrays.asList(2, 11, 38, 1, 4, 23));
-    List<Integer> OFF_2_CELLS = new ArrayList<>(Arrays.asList(19, 26, 42, 53, 48, 49,60));
-    List<Integer> DEF_1_CELLS = new ArrayList<>(Arrays.asList(5, 22, 8, 17,61));
+    List<Integer> OFF_1_CELLS = new ArrayList<>(Arrays.asList(2,  38, 1, 4, 23));
+    List<Integer> OFF_2_CELLS = new ArrayList<>(Arrays.asList(19, 26, 42, 53, 48));
+    List<Integer> DEF_1_CELLS = new ArrayList<>(Arrays.asList(5, 22, 17,61));
     List<Integer> CON_1_CELLS = new ArrayList<>(Arrays.asList(7, 13, 31, 33, 39, 43));
     List<Integer> CON_2_CELLS = new ArrayList<>(Arrays.asList(28, 41));
 
@@ -96,7 +96,7 @@ public class Board {
             addEquipmentCell(1, heroClasse, "CONSUMABLE", numberCell);
             ;
         }
-        debugPrintBoard();
+
 
     }
 
@@ -138,37 +138,5 @@ public class Board {
         this.name = name;
     }
 
-    public void debugPrintBoard() {
-        if (cells == null || cells.isEmpty()) {
-            System.out.println("Board vide ou non initialise.");
-            return;
-        }
 
-        System.out.println("Board #" + id + " - " + name);
-        System.out.println("Legend: __=Empty, EN=Enemy, EQ=Equipment");
-
-        for (int i = 0; i < BOARD_SIZE; i++) {
-            Cell cell = i < cells.size() ? cells.get(i) : null;
-            System.out.printf("[%02d:%s] ", i, getDebugCellCode(cell));
-
-            if ((i + 1) % 8 == 0) {
-                System.out.println();
-            }
-        }
-    }
-       private String getDebugCellCode(Cell cell) {
-        if (cell == null) {
-            return "??";
-        }
-        if (cell instanceof EnemyCell) {
-            return "EN";
-        }
-        if (cell instanceof EquipmentCell) {
-            return "EQ";
-        }
-        if (cell instanceof EmptyCell) {
-            return "__";
-        }
-        return "??";
-    }
 }

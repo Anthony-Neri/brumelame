@@ -1,7 +1,6 @@
 package fr.neri.brumelame.domain.character;
 
 import fr.neri.brumelame.domain.equipment.OffensiveEquipment;
-import fr.neri.brumelame.domain.equipment.Weapon;
 
 public class Warrior extends Hero {
 
