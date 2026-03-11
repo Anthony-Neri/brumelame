@@ -245,3 +245,10 @@ classDiagram
 
 ### Interface utilisateur (`ui`)
 - [`Menu`](src/fr/neri/brumelame/ui/Menu.java) : Gère l'interface utilisateur en ligne de commande
+
+
+mkdir out
+javac -d out $(find src -name "*.java")
+cd out
+jar cvf fr.neri.brumelame.jar .
+java -cp fr.neri.brumelame.jar fr.neri.brumelame.app.Main

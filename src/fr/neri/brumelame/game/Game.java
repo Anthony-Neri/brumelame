@@ -85,7 +85,9 @@ public class Game {
         String type = (choice == 1) ? "wizard" : "warrior";
         this.hero = createHero(type, menu.askNameCharacter());
 
-        board.initializeCells(hero.getHeroClass());
+        try {
+            board.initializeCells(hero.getHeroClass());
+        } catch (Exception $e) {}
 
         characterMenu();
 
@@ -154,29 +156,33 @@ public class Game {
 
 
 
-        HeroClasse heroClasse;
-        OffensiveEquipment equip = (OffensiveEquipment) equipmentDAO.findByHeroClasseAndNivAndType(type.toUpperCase(),0, "ATTACK");
+        HeroClasse heroClasse = null;
+        OffensiveEquipment equip = null;
+        Hero hero = null;
+
+        try {
+            equip = (OffensiveEquipment) equipmentDAO.findByHeroClasseAndNivAndType(type.toUpperCase(),0, "ATTACK");
+        } catch (Exception $e) {}
+
+        try {
+            heroClasse = heroClassesDAO.findByName(type);
+        } catch (Exception $e) {
+            heroClasse = new HeroClasse("", 10, 1);
+        }
 
         if (Objects.equals(type, "wizard")) {
-            heroClasse = heroClassesDAO.findByName("wizard");
-
-
-            Wizard wizard = new Wizard(name, heroClasse.getHealth(), heroClasse.getAttack(), equip);
-            wizard.setBoardId(board.getId());
-            wizard.setCellId(board.getCell(0).getId());
-            wizard.setId(heroDAO.create(wizard));
-            return wizard;
-
+            hero = new Wizard(name, heroClasse.getHealth(), heroClasse.getAttack(), equip);
         } else {
-
-            heroClasse = heroClassesDAO.findByName("warrior");
-
-            Warrior warrior = new Warrior(name, heroClasse.getHealth(), heroClasse.getAttack(), equip);
-            warrior.setBoardId(board.getId());
-            warrior.setCellId(board.getCell(0).getId());
-            warrior.setId(heroDAO.create(warrior));
-            return warrior;
+            hero = new Warrior(name, heroClasse.getHealth(), heroClasse.getAttack(), equip);
         }
+     
+        hero.setBoardId(board.getId());
+        hero.setCellId(board.getCell(0).getId());
+        try {
+            hero.setId(heroDAO.create(hero));
+        } catch (Exception $e) {}
+
+        return hero;
     }
 
     /**
