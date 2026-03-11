@@ -38,12 +38,9 @@ public class Menu {
         return askInt("Choix :", 1, 3);
     }
 
-    public int askCharacterType() {
+    public String askCharacterType() {
         System.out.println();
-        System.out.println("Choisis ta classe :");
-        System.out.println("1. Sorcier");
-        System.out.println("2. Guerrier");
-        return askInt("Choix", 1, 2);
+        return askString("Choisis ta classe (Wizard, Warrior) :");
     }
 
     public int askCharacterMenuChoice() {
@@ -78,7 +75,7 @@ public class Menu {
         System.out.println("║               FICHE DU HÉROS                 ║");
         System.out.println("╠══════════════════════════════════════════════╣");
         System.out.printf("║ %-14s %-28s ║%n", "Nom           :", hero.getName());
-        System.out.printf("║ %-14s %-28s ║%n", "Classe        :", hero.getHeroClass());
+        System.out.printf("║ %-14s %-28s ║%n", "Classe        :", hero.getClass().getSimpleName());
         System.out.printf("║ %-14s %-28d ║%n", "Vie           :", hero.getHealth());
         System.out.printf("║ %-14s %-28d ║%n", "Attaque       :", hero.getAttack());
         System.out.printf("║ %-14s %-28d ║%n", "Dégâts totaux :", hero.getDamage());

@@ -81,12 +81,11 @@ public class Game {
         board.initialize();
 
 
-        int choice = menu.askCharacterType();
-        String type = (choice == 1) ? "wizard" : "warrior";
-        this.hero = createHero(type, menu.askNameCharacter());
+        String choice = menu.askCharacterType();
+        this.hero = createHero(choice, menu.askNameCharacter());
 
         try {
-            board.initializeCells(hero.getHeroClass());
+            board.initializeCells(hero.getClass().getName());
         } catch (Exception $e) {}
 
         characterMenu();
@@ -147,9 +146,9 @@ public class Game {
     /**
      * Crée un personnage selon le type demandé.
      *
-     * @param type type de personnage attendu ({@code "wizard"} ou autre)
+     * @param type type de personnage attendu ({@code "Wizard"} ou autre = le nom de la Classe)
      * @param name nom du personnage
-     * @return une instance de {@link Wizard} si le type vaut {@code "wizard"},
+     * @return une instance de {@link Wizard} si le type vaut {@code "Wizard"},
      * sinon une instance de {@link Warrior}
      */
     public Hero createHero(String type, String name) {
@@ -170,7 +169,7 @@ public class Game {
             heroClasse = new HeroClasse("", 10, 1);
         }
 
-        if (Objects.equals(type, "wizard")) {
+        if (Objects.equals(type, "Wizard")) {
             hero = new Wizard(name, heroClasse.getHealth(), heroClasse.getAttack(), equip);
         } else {
             hero = new Warrior(name, heroClasse.getHealth(), heroClasse.getAttack(), equip);
