@@ -4,8 +4,10 @@ import fr.neri.brumelame.dao.BoardDAO;
 import fr.neri.brumelame.dao.CellDAO;
 import fr.neri.brumelame.dao.EnemyDAO;
 import fr.neri.brumelame.dao.EquipmentDAO;
+import fr.neri.brumelame.domain.enemy.Enemy;
 import fr.neri.brumelame.domain.equipment.Equipment;
 
+import fr.neri.brumelame.exception.BoardInitializationException;
 import fr.neri.brumelame.game.cell.*;
 
 import java.time.LocalDate;
@@ -67,7 +69,7 @@ public class Board {
 
     }
 
-    public void initializeCells(String heroClasse) {
+    public void initializeCells(String heroClasse) throws BoardInitializationException {
 
         for (int numberCell : DRAGON_CELLS) {
             addEnemyCell(3, numberCell);
@@ -81,41 +83,42 @@ public class Board {
 
         for (int numberCell : OFF_1_CELLS) {
             addEquipmentCell(1, heroClasse, "ATTACK", numberCell);
-
         }
         for (int numberCell : OFF_2_CELLS) {
             addEquipmentCell(2, heroClasse, "ATTACK", numberCell);
-
         }
         for (int numberCell : DEF_1_CELLS) {
             addEquipmentCell(1, heroClasse, "DEFENSE", numberCell);
-
         }
-
         for (int numberCell : CON_1_CELLS) {
             addEquipmentCell(1, heroClasse, "CONSUMABLE", numberCell);
-
         }
         for (int numberCell : CON_2_CELLS) {
             addEquipmentCell(1, heroClasse, "CONSUMABLE", numberCell);
-
         }
-
-
     }
 
-    private void addEnemyCell(int idEnemy, int position) {
+    private void addEnemyCell(int idEnemy, int position)  throws BoardInitializationException {
 
-        EnemyCell cell = new EnemyCell(position, this.id, enemyDAO.find(idEnemy));
+        Enemy enemy = enemyDAO.find(idEnemy);
+
+        if (enemy == null){
+            throw new BoardInitializationException(
+                    "Aucun ennemi avec l'id " + idEnemy + " trouvé."
+            );
+        }
+
+        EnemyCell cell = new EnemyCell(position, this.id, enemy);
 
         this.updateCell(cell);
     }
 
-    private void addEquipmentCell(int niv, String heroClasse, String type, int position) {
+    private void addEquipmentCell(int niv, String heroClasse, String type, int position)
+        throws BoardInitializationException {
         Equipment equipment = equipmentDAO.findByHeroClassAndLevelAndType(heroClasse, niv, type);
 
         if (equipment == null) {
-            throw new IllegalStateException(
+            throw new BoardInitializationException(
                     "Aucun équipement trouvé pour heroClasse=" + heroClasse
                             + ", niveau=" + niv
                             + ", type=" + type
@@ -124,7 +127,6 @@ public class Board {
         }
 
         EquipmentCell cell = new EquipmentCell(position, this.id, equipment);
-
         this.updateCell(cell);
     }
 
