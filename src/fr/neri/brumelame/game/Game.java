@@ -180,8 +180,8 @@ public class Game {
 
         hero.setName(name);
         hero.setHealth(heroClasse.getHealth());
+        hero.setMaxHealth(heroClasse.getHealth());
         hero.setAttack(heroClasse.getAttack());
-
         if (equip != null) {
             hero.setOffEquip(equip);
         }

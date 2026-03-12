@@ -90,7 +90,7 @@ INSERT INTO equipments (id, name, equipment_type, bonus, description, equipment_
 (5, 'Bâton d''éclair de mana', 'ATTACK', 2, 'Éclair de mana', 2, 1),
 (6, 'Bâton de boule de feu', 'ATTACK', 4, 'Les boules de feu ça brule', 2, 2),
 (7, 'Bouclier de fer', 'DEFENSE', 2, 'Bouclier en bois', 1, 1),
-(8, 'Bouclier de mana', 'DEFENSE', 1, 'Bouclier de mana', 2, 2),
+(8, 'Bouclier de mana', 'DEFENSE', 1, 'Bouclier de mana', 2, 1),
 (9, 'Petite potion de vie', 'CONSUMABLE', 3, 'Rend un peu de vie', 3, 1),
 (10, 'Grande potion de vie', 'CONSUMABLE', 5, 'Rend davantage de vie', 3, 2);
 

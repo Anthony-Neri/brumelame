@@ -22,7 +22,7 @@ public class EquipmentCell extends Cell{
 
     @Override
     public String toString() {
-        return "C'est une arme";
+        return equipment.getName();
     }
 
     @Override
