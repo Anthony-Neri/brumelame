@@ -6,7 +6,6 @@ import fr.neri.brumelame.dao.EnemyDAO;
 import fr.neri.brumelame.dao.EquipmentDAO;
 import fr.neri.brumelame.domain.enemy.Enemy;
 import fr.neri.brumelame.domain.equipment.Equipment;
-
 import fr.neri.brumelame.exception.BoardInitializationException;
 import fr.neri.brumelame.game.cell.*;
 
@@ -15,42 +14,58 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class Board {
 
     private static final int BOARD_SIZE = 64;
 
     private int id;
-    private List<Cell> cells;
+    private final List<Cell> cells;
     private String name;
-    private EnemyDAO enemyDAO;
-    private CellDAO cellDAO;
-    private EquipmentDAO equipmentDAO;
-    private BoardDAO boardDAO;
+    private final EnemyDAO enemyDAO;
+    private final CellDAO cellDAO;
+    private final EquipmentDAO equipmentDAO;
+    private final BoardDAO boardDAO;
 
-    // Positions :
-    List<Integer> DRAGON_CELLS = new ArrayList<>(Arrays.asList(45, 52, 56, 62, 63, 11));
-    List<Integer> WIZARD_CELLS = new ArrayList<>(Arrays.asList(10, 20, 25, 32, 35, 36, 37, 40, 44, 47, 57, 58, 60, 8));
-    List<Integer> GOBELIN_CELLS = new ArrayList<>(Arrays.asList(3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 49));
+    private static final List<Integer> DRAGON_CELLS = Arrays.asList(45, 52, 56, 62, 63, 11);
+    private static final List<Integer> WIZARD_CELLS = Arrays.asList(10, 20, 25, 32, 35, 36, 37, 40, 44, 47, 57, 58, 60, 8);
+    private static final List<Integer> GOBELIN_CELLS = Arrays.asList(3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 49);
 
-    List<Integer> OFF_1_CELLS = new ArrayList<>(Arrays.asList(2, 38, 1, 4, 23));
-    List<Integer> OFF_2_CELLS = new ArrayList<>(Arrays.asList(19, 26, 42, 53, 48));
-    List<Integer> DEF_1_CELLS = new ArrayList<>(Arrays.asList(5, 22, 17, 61));
-    List<Integer> CON_1_CELLS = new ArrayList<>(Arrays.asList(7, 13, 31, 33, 39, 43));
-    List<Integer> CON_2_CELLS = new ArrayList<>(Arrays.asList(28, 41));
+    private static final List<Integer> OFF_1_CELLS = Arrays.asList(2, 38, 1, 4, 23);
+    private static final List<Integer> OFF_2_CELLS = Arrays.asList(19, 26, 42, 53, 48);
+    private static final List<Integer> DEF_1_CELLS = Arrays.asList(5, 22, 17, 61);
+    private static final List<Integer> CON_1_CELLS = Arrays.asList(7, 13, 31, 33, 39, 43);
+    private static final List<Integer> CON_2_CELLS = Arrays.asList(28, 41);
 
-
-    public Board(String name) {
-        this.cells = new ArrayList<Cell>(64);
-        this.name = name;
-        this.enemyDAO = new EnemyDAO();
-        this.cellDAO = new CellDAO();
-        this.equipmentDAO = new EquipmentDAO();
-        this.boardDAO = new BoardDAO();
+    public Board(
+            String name,
+            EnemyDAO enemyDAO,
+            CellDAO cellDAO,
+            EquipmentDAO equipmentDAO,
+            BoardDAO boardDAO
+    ) {
+        this.cells = new ArrayList<>(BOARD_SIZE);
+        this.name = Objects.requireNonNull(name);
+        this.enemyDAO = Objects.requireNonNull(enemyDAO);
+        this.cellDAO = Objects.requireNonNull(cellDAO);
+        this.equipmentDAO = Objects.requireNonNull(equipmentDAO);
+        this.boardDAO = Objects.requireNonNull(boardDAO);
     }
 
-    public Board() { // Constructeur avec date et heure du jour par défaut
-        this(LocalDate.now().format(DateTimeFormatter.ofPattern("dd_MM_yyyy")));
+    public Board(
+            EnemyDAO enemyDAO,
+            CellDAO cellDAO,
+            EquipmentDAO equipmentDAO,
+            BoardDAO boardDAO
+    ) {
+        this(
+                LocalDate.now().format(DateTimeFormatter.ofPattern("dd_MM_yyyy")),
+                enemyDAO,
+                cellDAO,
+                equipmentDAO,
+                boardDAO
+        );
     }
 
     public void initialize() {

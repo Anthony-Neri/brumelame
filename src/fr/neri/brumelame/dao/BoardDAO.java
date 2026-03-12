@@ -43,25 +43,25 @@ public class BoardDAO extends DAO<Board> {
         }
     }
 
-    public Board find(int id) {
-        String sql = "SELECT * FROM boards WHERE id = ?";
-
-        try (PreparedStatement ps = conn.getConnection().prepareStatement(sql)) {
-            ps.setInt(1, id);
-
-            try (ResultSet rs = ps.executeQuery()) {
-                if (!rs.next()) {
-                    return null;
-                }
-
-                Board board = new Board(rs.getString("name"));
-                board.setId(rs.getInt("id"));
-                return board;
-            }
-        } catch (SQLException e) {
-            return null;
-        }
-    }
+//    public Board find(int id) {
+//        String sql = "SELECT * FROM boards WHERE id = ?";
+//
+//        try (PreparedStatement ps = conn.getConnection().prepareStatement(sql)) {
+//            ps.setInt(1, id);
+//
+//            try (ResultSet rs = ps.executeQuery()) {
+//                if (!rs.next()) {
+//                    return null;
+//                }
+//
+//                Board board = new Board(rs.getString("name"));
+//                board.setId(rs.getInt("id"));
+//                return board;
+//            }
+//        } catch (SQLException e) {
+//            return null;
+//        }
+//    }
 
     public boolean update(Board board) {
         if (board == null || board.getId() < 1) {

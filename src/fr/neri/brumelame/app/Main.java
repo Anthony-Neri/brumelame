@@ -1,5 +1,8 @@
 package fr.neri.brumelame.app;
 
+import fr.neri.brumelame.dao.BoardDAO;
+import fr.neri.brumelame.dao.CellDAO;
+import fr.neri.brumelame.dao.EnemyDAO;
 import fr.neri.brumelame.dao.EquipmentDAO;
 import fr.neri.brumelame.dao.HeroClassesDAO;
 import fr.neri.brumelame.dao.HeroDAO;
@@ -15,16 +18,25 @@ public class Main {
 
     public static void main(String[] args) {
         try {
+            EquipmentDAO equipmentDAO = new EquipmentDAO();
+
             HeroCreationService heroCreationService = new HeroCreationService(
-                    new EquipmentDAO(),
+                    equipmentDAO,
                     new HeroClassesDAO(),
                     new HeroDAO()
+            );
+
+            Board board = new Board(
+                    new EnemyDAO(),
+                    new CellDAO(),
+                    equipmentDAO,
+                    new BoardDAO()
             );
 
             Game game = new Game(
                     new Menu(),
                     new Dice(1, 6),
-                    new Board(),
+                    board,
                     heroCreationService
             );
 
