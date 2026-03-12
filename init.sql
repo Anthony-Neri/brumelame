@@ -1,124 +1,162 @@
--- Adminer 5.4.1 MariaDB 10.11.14-MariaDB-0ubuntu0.24.04.1 dump
-
-SET NAMES utf8;
+SET NAMES utf8mb4;
 SET time_zone = '+00:00';
 SET foreign_key_checks = 0;
 SET sql_mode = 'NO_AUTO_VALUE_ON_ZERO';
 
-SET NAMES utf8mb4;
+CREATE DATABASE IF NOT EXISTS brumelame
+  DEFAULT CHARACTER SET utf8mb4
+  COLLATE utf8mb4_unicode_ci;
 
-CREATE DATABASE IF NOT EXISTS `brumelame` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci */;
-USE `brumelame`;
+USE brumelame;
 
-DROP TABLE IF EXISTS `boards`;
-CREATE TABLE `boards` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) NOT NULL,
-  PRIMARY KEY (`id`)
+DROP TABLE IF EXISTS heroes;
+DROP TABLE IF EXISTS hero_class_categories;
+DROP TABLE IF EXISTS cells;
+DROP TABLE IF EXISTS equipments;
+DROP TABLE IF EXISTS equipment_categories;
+DROP TABLE IF EXISTS enemies;
+DROP TABLE IF EXISTS hero_classes;
+DROP TABLE IF EXISTS boards;
+
+CREATE TABLE boards (
+  id INT NOT NULL AUTO_INCREMENT,
+  name VARCHAR(50) NOT NULL,
+  PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-
-DROP TABLE IF EXISTS `cells`;
-CREATE TABLE `cells` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `number` int(11) DEFAULT NULL,
-  `id_board` int(11) DEFAULT NULL,
-  `id_equipement` int(11) DEFAULT NULL,
-  `id_ennemy` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `id_board` (`id_board`),
-  KEY `id_equipement` (`id_equipement`),
-  KEY `id_ennemy` (`id_ennemy`),
-  CONSTRAINT `cells_ibfk_1` FOREIGN KEY (`id_board`) REFERENCES `boards` (`id`),
-  CONSTRAINT `cells_ibfk_2` FOREIGN KEY (`id_equipement`) REFERENCES `equipments` (`id`),
-  CONSTRAINT `cells_ibfk_3` FOREIGN KEY (`id_ennemy`) REFERENCES `enemies` (`id`)
+CREATE TABLE hero_classes (
+  id INT NOT NULL AUTO_INCREMENT,
+  name VARCHAR(50) NOT NULL,
+  base_attack INT NOT NULL,
+  base_health INT NOT NULL,
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_hero_classes_name (name),
+  CONSTRAINT chk_hero_classes_base_attack CHECK (base_attack >= 0),
+  CONSTRAINT chk_hero_classes_base_health CHECK (base_health >= 0)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+INSERT INTO hero_classes (id, name, base_attack, base_health) VALUES
+(1, 'WARRIOR', 5, 10),
+(2, 'WIZARD', 8, 6);
 
-DROP TABLE IF EXISTS `enemies`;
-CREATE TABLE `enemies` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) DEFAULT NULL,
-  `health` int(11) DEFAULT NULL,
-  `attack` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+CREATE TABLE equipment_categories (
+  id INT NOT NULL AUTO_INCREMENT,
+  code VARCHAR(50) NOT NULL,
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_equipment_categories_code (code)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-INSERT INTO `enemies` (`id`, `name`, `health`, `attack`) VALUES
-(1,	'sorcier',	9,	2),
-(2,	'gobelin',	6,	1),
-(3,	'dragon',	15,	4);
+INSERT INTO equipment_categories (id, code) VALUES
+(1, 'WEAPON'),
+(2, 'SPELL'),
+(3, 'POTION'),
+(4, 'SHIELD');
 
-DROP TABLE IF EXISTS `equipments`;
-CREATE TABLE `equipments` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) NOT NULL,
-  `type` enum('ATTACK','DEFENSE','CONSUMABLE') NOT NULL,
-  `bonus` int(11) NOT NULL,
-  `description` varchar(50) DEFAULT NULL,
-  `category` varchar(50) NOT NULL,
-  `niv` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
+CREATE TABLE enemies (
+  id INT NOT NULL AUTO_INCREMENT,
+  name VARCHAR(50) NOT NULL,
+  health INT NOT NULL,
+  attack INT NOT NULL,
+  PRIMARY KEY (id),
+  CONSTRAINT chk_enemies_health CHECK (health >= 0),
+  CONSTRAINT chk_enemies_attack CHECK (attack >= 0)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-INSERT INTO `equipments` (`id`, `name`, `type`, `bonus`, `description`, `category`, `niv`) VALUES
-(1,	'Epee de fer',	'ATTACK',	3,	'Epee de fer banale',	'WEAPON',	1),
-(2,	'Epee de bois',	'ATTACK',	0,	'arme intiale',	'WEAPON',	0),
-(3,	'baton de marche',	'ATTACK',	0,	'baton initiale',	'SPELL',	0),
-(4,	'baton de boule de feu',	'ATTACK',	3,	'une peu plus de panache',	'SPELL',	1),
-(5,	'Epee de fer',	'ATTACK',	5,	'epee tranchante',	'WEAPON',	2),
-(6,	'Baton boule de feu supreme',	'ATTACK',	5,	NULL,	'SPELL',	2),
-(7,	'Bouclier de Mana',	'DEFENSE',	3,	NULL,	'SPELL',	1),
-(8,	'Bouclier de fer',	'DEFENSE',	3,	NULL,	'WEAPON',	1),
-(9,	'Petite potion de vie',	'CONSUMABLE',	3,	NULL,	'CONSOMABLE',	1),
-(10,	'Grande potion de vie',	'CONSUMABLE',	5,	NULL,	'CONSOMABLE',	2);
+INSERT INTO enemies (id, name, health, attack) VALUES
+(1, 'sorcier', 9, 2),
+(2, 'gobelin', 6, 1),
+(3, 'dragon', 15, 4);
 
-DROP TABLE IF EXISTS `heroclasses`;
-CREATE TABLE `heroclasses` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) NOT NULL,
-  `attack` int(11) NOT NULL,
-  `health` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
+CREATE TABLE equipments (
+  id INT NOT NULL AUTO_INCREMENT,
+  name VARCHAR(50) NOT NULL,
+  equipment_type ENUM('ATTACK', 'DEFENSE', 'CONSUMABLE') NOT NULL,
+  bonus INT NOT NULL,
+  description VARCHAR(255) DEFAULT NULL,
+  equipment_category_id INT NOT NULL,
+  level INT NOT NULL,
+  PRIMARY KEY (id),
+  KEY idx_equipments_equipment_category_id (equipment_category_id),
+  CONSTRAINT fk_equipments_equipment_category_id
+    FOREIGN KEY (equipment_category_id) REFERENCES equipment_categories (id),
+  CONSTRAINT chk_equipments_bonus CHECK (bonus >= 0),
+  CONSTRAINT chk_equipments_level CHECK (level >= 0)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-INSERT INTO `heroclasses` (`id`, `name`, `attack`, `health`) VALUES
-(1,	'warrior',	5,	10),
-(2,	'wizard',	8,	6);
+INSERT INTO equipments (id, name, equipment_type, bonus, description, equipment_category_id, level) VALUES
+(1, 'Épée de fer', 'ATTACK', 3, 'Épée de fer banale', 1, 1),
+(2, 'Épée de bois', 'ATTACK', 0, 'Arme initiale', 1, 0),
+(3, 'Bâton de marche', 'ATTACK', 0, 'Bâton initial', 2, 0),
+(4, 'Bâton de boule de feu', 'ATTACK', 3, 'Un peu plus de panache', 2, 1),
+(5, 'Bouclier de fer', 'DEFENSE', 2, 'Bouclier en bois', 4, 1),
+(6, 'Bouclier de mana', 'DEFENSE', 3, 'Bouclier renforcé', 4, 2),
+(9, 'Petite potion de vie', 'CONSUMABLE', 3, 'Rend un peu de vie', 3, 1),
+(10, 'Grande potion de vie', 'CONSUMABLE', 5, 'Rend davantage de vie', 3, 2);
 
-DROP TABLE IF EXISTS `heroclasses_categories`;
-CREATE TABLE `heroclasses_categories` (
-  `category` varchar(50) NOT NULL,
-  `heroclasse` varchar(50) NOT NULL
+CREATE TABLE hero_class_categories (
+  hero_class_id INT NOT NULL,
+  equipment_category_id INT NOT NULL,
+  PRIMARY KEY (hero_class_id, equipment_category_id),
+  KEY idx_hero_class_categories_equipment_category_id (equipment_category_id),
+  CONSTRAINT fk_hero_class_categories_hero_class_id
+    FOREIGN KEY (hero_class_id) REFERENCES hero_classes (id),
+  CONSTRAINT fk_hero_class_categories_equipment_category_id
+    FOREIGN KEY (equipment_category_id) REFERENCES equipment_categories (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-INSERT INTO `heroclasses_categories` (`category`, `heroclasse`) VALUES
-('WEAPON',	'WARRIOR'),
-('SPELL',	'WIZARD'),
-('CONSOMABLE',	'WARRIOR'),
-('CONSOMABLE',	'WIZARD');
+INSERT INTO hero_class_categories (hero_class_id, equipment_category_id) VALUES
+(1, 1), -- WARRIOR -> WEAPON
+(1, 4), -- WARRIOR -> SHIELD
+(1, 3), -- WARRIOR -> POTION
+(2, 2), -- WIZARD -> SPELL
+(2, 3); -- WIZARD -> POTION
 
-DROP TABLE IF EXISTS `heroes`;
-CREATE TABLE `heroes` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) DEFAULT NULL,
-  `type` enum('WARRIOR','WIZARD') DEFAULT NULL,
-  `health` int(11) DEFAULT NULL,
-  `attack` int(11) DEFAULT NULL,
-  `id_off_equip` int(11) DEFAULT NULL,
-  `id_def_equip` int(11) DEFAULT NULL,
-  `id_cell` int(11) DEFAULT NULL,
-  `id_board` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `id_off_equip` (`id_off_equip`),
-  KEY `id_def_equip` (`id_def_equip`),
-  KEY `id_cell` (`id_cell`),
-  KEY `id_board` (`id_board`),
-  CONSTRAINT `heroes_ibfk_1` FOREIGN KEY (`id_off_equip`) REFERENCES `equipments` (`id`),
-  CONSTRAINT `heroes_ibfk_2` FOREIGN KEY (`id_def_equip`) REFERENCES `equipments` (`id`),
-  CONSTRAINT `heroes_ibfk_3` FOREIGN KEY (`id_cell`) REFERENCES `cells` (`id`),
-  CONSTRAINT `heroes_ibfk_4` FOREIGN KEY (`id_board`) REFERENCES `boards` (`id`)
+CREATE TABLE cells (
+  id INT NOT NULL AUTO_INCREMENT,
+  cell_number INT NOT NULL,
+  board_id INT NOT NULL,
+  equipment_id INT DEFAULT NULL,
+  enemy_id INT DEFAULT NULL,
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_cells_board_id_cell_number (board_id, cell_number),
+  KEY idx_cells_equipment_id (equipment_id),
+  KEY idx_cells_enemy_id (enemy_id),
+  CONSTRAINT fk_cells_board_id
+    FOREIGN KEY (board_id) REFERENCES boards (id),
+  CONSTRAINT fk_cells_equipment_id
+    FOREIGN KEY (equipment_id) REFERENCES equipments (id),
+  CONSTRAINT fk_cells_enemy_id
+    FOREIGN KEY (enemy_id) REFERENCES enemies (id),
+  CONSTRAINT chk_cells_cell_number CHECK (cell_number >= 0),
+  CONSTRAINT chk_cells_single_content CHECK (
+    equipment_id IS NULL OR enemy_id IS NULL
+  )
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE heroes (
+  id INT NOT NULL AUTO_INCREMENT,
+  name VARCHAR(50) NOT NULL,
+  hero_class_id INT NOT NULL,
+  health INT NOT NULL,
+  attack INT NOT NULL,
+  offensive_equipment_id INT DEFAULT NULL,
+  defensive_equipment_id INT DEFAULT NULL,
+  cell_id INT DEFAULT NULL,
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_heroes_cell_id (cell_id),
+  KEY idx_heroes_hero_class_id (hero_class_id),
+  KEY idx_heroes_offensive_equipment_id (offensive_equipment_id),
+  KEY idx_heroes_defensive_equipment_id (defensive_equipment_id),
+  CONSTRAINT fk_heroes_hero_class_id
+    FOREIGN KEY (hero_class_id) REFERENCES hero_classes (id),
+  CONSTRAINT fk_heroes_offensive_equipment_id
+    FOREIGN KEY (offensive_equipment_id) REFERENCES equipments (id),
+  CONSTRAINT fk_heroes_defensive_equipment_id
+    FOREIGN KEY (defensive_equipment_id) REFERENCES equipments (id),
+  CONSTRAINT fk_heroes_cell_id
+    FOREIGN KEY (cell_id) REFERENCES cells (id),
+  CONSTRAINT chk_heroes_health CHECK (health >= 0),
+  CONSTRAINT chk_heroes_attack CHECK (attack >= 0)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 2026-03-11 15:29:46 UTC
+SET foreign_key_checks = 1;

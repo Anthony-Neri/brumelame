@@ -1,9 +1,9 @@
 package fr.neri.brumelame.dao;
 
 import fr.neri.brumelame.domain.equipment.ConsumableEquipment;
+import fr.neri.brumelame.domain.equipment.DefensiveEquipment;
 import fr.neri.brumelame.domain.equipment.Equipment;
 import fr.neri.brumelame.domain.equipment.OffensiveEquipment;
-import fr.neri.brumelame.domain.equipment.DefensiveEquipment;
 import fr.neri.brumelame.db.DatabaseConnection;
 
 import java.sql.PreparedStatement;
@@ -20,9 +20,13 @@ public class EquipmentDAO extends DAO<Equipment> {
         super();
     }
 
-
     public Equipment find(int id) {
-        String sql = "SELECT * FROM equipments WHERE id = ?";
+        String sql = """
+            SELECT e.id, e.name, e.equipment_type, ec.code AS category, e.description, e.bonus
+            FROM equipments e
+            JOIN equipment_categories ec ON e.equipment_category_id = ec.id
+            WHERE e.id = ?
+        """;
 
         try (PreparedStatement ps = conn.getConnection().prepareStatement(sql)) {
             ps.setInt(1, id);
@@ -32,37 +36,29 @@ public class EquipmentDAO extends DAO<Equipment> {
                     return null;
                 }
 
-                String type = rs.getString("type");
-                String name = rs.getString("name");
-                String category = rs.getString("category");
-                String description = rs.getString("description");
-                int bonus = rs.getInt("bonus");
-
-                Equipment equipment;
-                switch(type){
-                    case "ATTACK" ->   equipment = new OffensiveEquipment(type, name, category, description, bonus);
-                    case "DEFENSE" ->   equipment = new DefensiveEquipment(type, name, category, description, bonus);
-                    default -> {
-                        return null;
-                    }
-                }
-
-                equipment.setId(id);
-
-                return equipment;
+                return mapEquipment(rs);
             }
         } catch (SQLException e) {
-            return null;
+            throw new RuntimeException("Erreur SQL lors de la recherche de l'équipement id=" + id, e);
         }
     }
-    public Equipment findByHeroClasseAndNivAndType(String heroClasse, int niv, String type ) {
-        String sql = "SELECT * FROM equipments e " +
-                "JOIN heroclasses_categories hc on e.category = hc.category " +
-                "WHERE niv = ? and hc.heroclasse = ? and type = ? LIMIT 1 ";
+
+    public Equipment findByHeroClassAndLevelAndType(String heroClass, int level, String type) {
+        String sql = """
+            SELECT e.id, e.name, e.equipment_type, ec.code AS category, e.description, e.bonus
+            FROM equipments e
+            JOIN equipment_categories ec ON e.equipment_category_id = ec.id
+            JOIN hero_class_categories hcc ON hcc.equipment_category_id = ec.id
+            JOIN hero_classes hc ON hc.id = hcc.hero_class_id
+            WHERE e.level = ?
+              AND hc.name = ?
+              AND e.equipment_type = ?
+            LIMIT 1
+        """;
 
         try (PreparedStatement ps = conn.getConnection().prepareStatement(sql)) {
-            ps.setString(2, heroClasse);
-            ps.setInt(1, niv);
+            ps.setInt(1, level);
+            ps.setString(2, heroClass.toUpperCase());
             ps.setString(3, type.toUpperCase());
 
             try (ResultSet rs = ps.executeQuery()) {
@@ -70,28 +66,36 @@ public class EquipmentDAO extends DAO<Equipment> {
                     return null;
                 }
 
-                String name = rs.getString("name");
-                String category = rs.getString("category");
-                String description = rs.getString("description");
-                int bonus = rs.getInt("bonus");
-
-                Equipment equipment;
-                switch(type){
-                    case "ATTACK" ->   equipment = new OffensiveEquipment(type, name, category, description, bonus);
-                    case "DEFENSE" ->   equipment = new DefensiveEquipment(type, name, category, description, bonus);
-                    case "CONSUMABLE" -> equipment = new ConsumableEquipment(type, name, category, description, bonus);
-                    default -> {
-                        return null;
-                    }
-                }
-
-                equipment.setId(rs.getInt("id"));
-
-                return equipment;
+                return mapEquipment(rs);
             }
         } catch (SQLException e) {
-            return null;
+            throw new RuntimeException(
+                "Erreur SQL lors de la recherche d'un équipement pour heroClass=" + heroClass
+                    + ", level=" + level
+                    + ", type=" + type,
+                e
+            );
         }
     }
 
+    private Equipment mapEquipment(ResultSet rs) throws SQLException {
+        String type = rs.getString("equipment_type");
+        String name = rs.getString("name");
+        String category = rs.getString("category");
+        String description = rs.getString("description");
+        int bonus = rs.getInt("bonus");
+
+        Equipment equipment;
+        switch (type) {
+            case "ATTACK" -> equipment = new OffensiveEquipment(type, name, category, description, bonus);
+            case "DEFENSE" -> equipment = new DefensiveEquipment(type, name, category, description, bonus);
+            case "CONSUMABLE" -> equipment = new ConsumableEquipment(type, name, category, description, bonus);
+            default -> {
+                return null;
+            }
+        }
+
+        equipment.setId(rs.getInt("id"));
+        return equipment;
+    }
 }

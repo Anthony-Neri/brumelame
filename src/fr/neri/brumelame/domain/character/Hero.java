@@ -25,8 +25,6 @@ public abstract class Hero {
     private OffensiveEquipment offEquip;
     /** Équipement défensif actuellement porté. */
     private DefensiveEquipment defEquip;
-    /** ID du plateau. */
-    private int boardId;
     /** ID de la cellule. */
     private int cellId;
 
@@ -108,13 +106,6 @@ public abstract class Hero {
         this.defEquip = defEquip;
     }
 
-    public int getBoardId() {
-        return boardId;
-    }
-
-    public void setBoardId(int boardId) {
-        this.boardId = boardId;
-    }
 
     public int getCellId() {
         return cellId;

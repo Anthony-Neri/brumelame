@@ -8,25 +8,23 @@ import java.sql.SQLException;
 
 public class HeroClassesDAO extends DAO<HeroClasse> {
 
-    public HeroClasse findByName(String name){
-        String sql = "Select * from heroclasses WHERE name = ?";
+    public HeroClasse findByName(String name) {
+        String sql = "SELECT * FROM hero_classes WHERE name = ?";
 
-        try(PreparedStatement ps = conn.getConnection().prepareStatement(sql)){
-            ps.setString(1,name);
+        try (PreparedStatement ps = conn.getConnection().prepareStatement(sql)) {
+            ps.setString(1, name);
 
-            try (ResultSet rs = ps.executeQuery()){
-                if (!rs.next()){
+            try (ResultSet rs = ps.executeQuery()) {
+                if (!rs.next()) {
                     return null;
                 }
-                int attack = rs.getInt("attack");
-                int health = rs.getInt("health");
 
-                return  new HeroClasse(name,attack,health);
+                int baseAttack = rs.getInt("base_attack");
+                int baseHealth = rs.getInt("base_health");
 
+                return new HeroClasse(name, baseAttack, baseHealth);
             }
-
-
-        }catch (SQLException e){
+        } catch (SQLException e) {
             return null;
         }
     }

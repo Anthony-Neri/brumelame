@@ -4,6 +4,7 @@ import fr.neri.brumelame.dao.BoardDAO;
 import fr.neri.brumelame.dao.CellDAO;
 import fr.neri.brumelame.dao.EnemyDAO;
 import fr.neri.brumelame.dao.EquipmentDAO;
+import fr.neri.brumelame.domain.equipment.Equipment;
 
 import fr.neri.brumelame.game.cell.*;
 
@@ -106,14 +107,26 @@ public class Board {
     private void addEnemyCell(int idEnemy, int position) {
 
         EnemyCell cell = new EnemyCell(position, this.id, enemyDAO.find(idEnemy));
-        cell.setId(cellDAO.create(cell));
+        cell.setId(getCell(position).getId());
+        cellDAO.update(cell);
         cells.set(position, cell);
     }
 
     private void addEquipmentCell(int niv, String heroClasse, String type, int position) {
-        EquipmentCell cell = new EquipmentCell(position, this.id,
-                equipmentDAO.findByHeroClasseAndNivAndType(heroClasse, niv, type));
-        cell.setId(cellDAO.create(cell));
+        Equipment equipment = equipmentDAO.findByHeroClassAndLevelAndType(heroClasse, niv, type);
+
+        if (equipment == null) {
+            throw new IllegalStateException(
+                "Aucun équipement trouvé pour heroClasse=" + heroClasse
+                    + ", niveau=" + niv
+                    + ", type=" + type
+                    + ", position=" + position
+            );
+        }
+
+        EquipmentCell cell = new EquipmentCell(position, this.id, equipment);
+        cell.setId(getCell(position).getId());
+        cellDAO.update(cell);
         cells.set(position, cell);
     }
 

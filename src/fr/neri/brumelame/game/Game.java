@@ -155,7 +155,7 @@ public class Game {
 
         OffensiveEquipment equip = null;
         try {
-            equip = (OffensiveEquipment) equipmentDAO.findByHeroClasseAndNivAndType(
+            equip = (OffensiveEquipment) equipmentDAO.findByHeroClassAndLevelAndType(
                     normalizedType, 0, "ATTACK"
             );
         } catch (Exception e) {
@@ -186,7 +186,7 @@ public class Game {
             hero.setOffEquip(equip);
         }
 
-        hero.setBoardId(board.getId());
+
         hero.setCellId(board.getCell(0).getId());
 
         try {
