@@ -27,13 +27,13 @@ public class Board {
     private BoardDAO boardDAO;
 
     // Positions :
-    List<Integer> DRAGON_CELLS = new ArrayList<>(Arrays.asList(45, 52, 56, 62,63,11));
-    List<Integer> WIZARD_CELLS = new ArrayList<>(Arrays.asList(10, 20, 25, 32, 35, 36, 37, 40, 44, 47,57,58,60,8));
-    List<Integer> GOBELIN_CELLS = new ArrayList<>(Arrays.asList(3, 6, 9, 12, 15, 18, 21, 24, 27, 30,49));
+    List<Integer> DRAGON_CELLS = new ArrayList<>(Arrays.asList(45, 52, 56, 62, 63, 11));
+    List<Integer> WIZARD_CELLS = new ArrayList<>(Arrays.asList(10, 20, 25, 32, 35, 36, 37, 40, 44, 47, 57, 58, 60, 8));
+    List<Integer> GOBELIN_CELLS = new ArrayList<>(Arrays.asList(3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 49));
 
-    List<Integer> OFF_1_CELLS = new ArrayList<>(Arrays.asList(2,  38, 1, 4, 23));
+    List<Integer> OFF_1_CELLS = new ArrayList<>(Arrays.asList(2, 38, 1, 4, 23));
     List<Integer> OFF_2_CELLS = new ArrayList<>(Arrays.asList(19, 26, 42, 53, 48));
-    List<Integer> DEF_1_CELLS = new ArrayList<>(Arrays.asList(5, 22, 17,61));
+    List<Integer> DEF_1_CELLS = new ArrayList<>(Arrays.asList(5, 22, 17, 61));
     List<Integer> CON_1_CELLS = new ArrayList<>(Arrays.asList(7, 13, 31, 33, 39, 43));
     List<Integer> CON_2_CELLS = new ArrayList<>(Arrays.asList(28, 41));
 
@@ -52,16 +52,16 @@ public class Board {
     }
 
     public void initialize() {
-        try {
-            int id = boardDAO.create(this);
-            if (id > 0) this.setId(id);
-        }catch (Exception $e) {}
+
+        int id = boardDAO.create(this);
+        if (id > 0) this.setId(id);
+
 
         for (int i = 0; i < BOARD_SIZE; i++) {
             EmptyCell emptyCell = new EmptyCell(i, this.id);
-            try {
-                emptyCell.setId(cellDAO.create(emptyCell));
-            } catch (Exception e) {}
+
+            emptyCell.setId(cellDAO.create(emptyCell));
+
             cells.add(emptyCell);
         }
 
@@ -107,9 +107,8 @@ public class Board {
     private void addEnemyCell(int idEnemy, int position) {
 
         EnemyCell cell = new EnemyCell(position, this.id, enemyDAO.find(idEnemy));
-        cell.setId(getCell(position).getId());
-        cellDAO.update(cell);
-        cells.set(position, cell);
+
+        this.updateCell(cell);
     }
 
     private void addEquipmentCell(int niv, String heroClasse, String type, int position) {
@@ -117,17 +116,22 @@ public class Board {
 
         if (equipment == null) {
             throw new IllegalStateException(
-                "Aucun équipement trouvé pour heroClasse=" + heroClasse
-                    + ", niveau=" + niv
-                    + ", type=" + type
-                    + ", position=" + position
+                    "Aucun équipement trouvé pour heroClasse=" + heroClasse
+                            + ", niveau=" + niv
+                            + ", type=" + type
+                            + ", position=" + position
             );
         }
 
         EquipmentCell cell = new EquipmentCell(position, this.id, equipment);
-        cell.setId(getCell(position).getId());
+
+        this.updateCell(cell);
+    }
+
+    public void updateCell(Cell cell) {
+        cell.setId(getCell(cell.getNumber()).getId());
         cellDAO.update(cell);
-        cells.set(position, cell);
+        cells.set(cell.getNumber(), cell);
     }
 
     public Cell getCell(int position) {

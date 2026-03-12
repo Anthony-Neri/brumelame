@@ -76,9 +76,9 @@ public class Game {
         String choice = menu.askCharacterType();
         this.hero = createHero(choice, menu.askNameCharacter());
 
-        try {
+
             board.initializeCells(hero.getClass().getSimpleName());
-        } catch (Exception e) {}
+
         characterMenu();
 
     }

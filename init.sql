@@ -49,8 +49,7 @@ CREATE TABLE equipment_categories (
 INSERT INTO equipment_categories (id, code) VALUES
 (1, 'WEAPON'),
 (2, 'SPELL'),
-(3, 'POTION'),
-(4, 'SHIELD');
+(3, 'POTION');
 
 CREATE TABLE enemies (
   id INT NOT NULL AUTO_INCREMENT,
@@ -84,12 +83,14 @@ CREATE TABLE equipments (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO equipments (id, name, equipment_type, bonus, description, equipment_category_id, level) VALUES
-(1, 'Épée de fer', 'ATTACK', 3, 'Épée de fer banale', 1, 1),
-(2, 'Épée de bois', 'ATTACK', 0, 'Arme initiale', 1, 0),
-(3, 'Bâton de marche', 'ATTACK', 0, 'Bâton initial', 2, 0),
-(4, 'Bâton de boule de feu', 'ATTACK', 3, 'Un peu plus de panache', 2, 1),
-(5, 'Bouclier de fer', 'DEFENSE', 2, 'Bouclier en bois', 4, 1),
-(6, 'Bouclier de mana', 'DEFENSE', 3, 'Bouclier renforcé', 4, 2),
+(1, 'Épée de bois', 'ATTACK', 0, 'Arme initiale', 1, 0),
+(2, 'Bâton de marche', 'ATTACK', 0, 'Bâton initial', 2, 0),
+(3, 'Épée de fer', 'ATTACK', 2, 'Épée de fer banale', 1, 1),
+(4, 'Épée en acier', 'ATTACK', 4, 'Épée en acier', 1, 2),
+(5, 'Bâton d''éclair de mana', 'ATTACK', 2, 'Éclair de mana', 2, 1),
+(6, 'Bâton de boule de feu', 'ATTACK', 4, 'Les boules de feu ça brule', 2, 2),
+(7, 'Bouclier de fer', 'DEFENSE', 2, 'Bouclier en bois', 1, 1),
+(8, 'Bouclier de mana', 'DEFENSE', 1, 'Bouclier de mana', 2, 2),
 (9, 'Petite potion de vie', 'CONSUMABLE', 3, 'Rend un peu de vie', 3, 1),
 (10, 'Grande potion de vie', 'CONSUMABLE', 5, 'Rend davantage de vie', 3, 2);
 
@@ -106,7 +107,6 @@ CREATE TABLE hero_class_categories (
 
 INSERT INTO hero_class_categories (hero_class_id, equipment_category_id) VALUES
 (1, 1), -- WARRIOR -> WEAPON
-(1, 4), -- WARRIOR -> SHIELD
 (1, 3), -- WARRIOR -> POTION
 (2, 2), -- WIZARD -> SPELL
 (2, 3); -- WIZARD -> POTION
