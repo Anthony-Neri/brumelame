@@ -18,6 +18,7 @@ public class Main {
 
     public static void main(String[] args) {
         try {
+
             EquipmentDAO equipmentDAO = new EquipmentDAO();
 
             HeroCreationService heroCreationService = new HeroCreationService(
