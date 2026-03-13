@@ -131,7 +131,7 @@ public class Game {
     }
 
     private void interactCellHero(int playerPosition) {
-        menu.printInteractCell(this.board.getCell(playerPosition).interact(this.hero));
+        this.board.getCell(playerPosition).interact(this.hero,this.menu);
     }
 
     private boolean gameOver() {

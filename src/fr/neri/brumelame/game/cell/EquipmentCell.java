@@ -26,8 +26,8 @@ public class EquipmentCell extends Cell{
     }
 
     @Override
-    public StringBuilder interact(Hero hero) {
-        Menu menu = new Menu();
+    public void interact(Hero hero, Menu menu) {
+
         int choice = menu.askEquipEquipment(this.equipment);
         String action = "Vous vous équipez de ";
         if (choice == 1) {
@@ -40,9 +40,11 @@ public class EquipmentCell extends Cell{
                 hero.getHeal(this.equipment.getBonus());
                 action = "Vous utilisez ";
             }
-            return new StringBuilder(action + getEquipment().getName());
+            menu.printMessage(action + getEquipment().getName());
+        }else {
+            menu.printMessage("Vous laissez " + this.equipment.getName() + " à terre.");
         }
 
-        return new StringBuilder("Vous laissez " + this.equipment.getName() + " à terre.");
+
     }
 }

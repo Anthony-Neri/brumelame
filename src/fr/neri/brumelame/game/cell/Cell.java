@@ -3,6 +3,7 @@ package fr.neri.brumelame.game.cell;
 import fr.neri.brumelame.domain.character.Hero;
 import fr.neri.brumelame.domain.equipment.Equipment;
 import fr.neri.brumelame.domain.enemy.Enemy;
+import fr.neri.brumelame.ui.Menu;
 
 public abstract class Cell {
 
@@ -58,5 +59,5 @@ public abstract class Cell {
     }
 
 
-    public abstract StringBuilder interact(Hero hero);
+    public abstract void interact(Hero hero, Menu menu);
 }

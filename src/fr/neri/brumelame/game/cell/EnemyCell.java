@@ -2,6 +2,7 @@ package fr.neri.brumelame.game.cell;
 
 import fr.neri.brumelame.domain.character.Hero;
 import fr.neri.brumelame.domain.enemy.Enemy;
+import fr.neri.brumelame.ui.Menu;
 
 public class EnemyCell extends Cell {
     private Enemy enemy;
@@ -24,36 +25,20 @@ public class EnemyCell extends Cell {
     }
 
 
-    public StringBuilder interact(Hero hero) {
-        StringBuilder fight = new StringBuilder();
-        int round = 1;
+    public void interact(Hero hero, Menu menu) {
 
-        fight.append("\n");
-        fight.append("╔══════════════════════════════════════╗\n");
-        fight.append("║            DÉBUT DU COMBAT           ║\n");
-        fight.append("╠══════════════════════════════════════╣\n");
-        fight.append(String.format("║ Héro   : %-27s ║%n", hero.getName()));
-        fight.append(String.format("║ Ennemi : %-27s ║%n", enemy.getName()));
-        fight.append("╚══════════════════════════════════════╝\n\n");
+        int round = 1;
+        menu.printStartFight(getEnemy().getName(), hero.getName());
+
+
+
 
         while (enemy.getHealth() > 0 && hero.getHealth() > 0) {
-            fight.append("──────────── Tour ").append(round).append(" ────────────\n");
 
             int heroDamage = hero.getDamage();
             enemy.receivedDamage(heroDamage);
-            fight.append("⚔ ")
-                    .append(hero.getName())
-                    .append(" inflige ")
-                    .append(heroDamage)
-                    .append(" dégâts à ")
-                    .append(enemy.getName())
-                    .append(".\n");
 
-            fight.append("   ")
-                    .append(enemy.getName())
-                    .append(" : ")
-                    .append(Math.max(enemy.getHealth(), 0))
-                    .append(" PV restants\n");
+           menu.printTurnFight(heroDamage, enemy.getHealth(),round, hero.getName(), getEnemy().getName());
 
             if (enemy.getHealth() > 0) {
                 int enemyDamage = enemy.getAttack();
@@ -62,35 +47,28 @@ public class EnemyCell extends Cell {
 
                 hero.receivedDamage(enemyDamage);
 
-                fight.append("🩸 ")
-                        .append(enemy.getName())
-                        .append(" inflige ")
-                        .append(finalDamage)
-                        .append(" dégâts à ")
-                        .append(hero.getName())
-                        .append(".\n");
+                menu.printTurnFight(finalDamage,hero.getHealth(),round, getEnemy().getName(), hero.getName());
 
-                fight.append("   ")
-                        .append(hero.getName())
-                        .append(" : ")
-                        .append(hero.getHealth())
-                        .append(" PV restants\n");
             }
 
-            fight.append("\n");
             round++;
         }
 
-        fight.append("══════════════════════════════════════\n");
-        if (hero.getHealth() <= 0) {
-            fight.append(hero.getName()).append(" a été vaincu.\n");
-        } else {
-            fight.append(hero.getName()).append(" a vaincu ")
-                    .append(enemy.getName()).append(".\n");
-        }
-        fight.append("══════════════════════════════════════\n");
+        String winnerName = "";
+        String looserName = "";
 
-        return fight;
+        if (hero.getHealth() <= 0) {
+            winnerName = getEnemy().getName();
+            looserName = hero.getName();
+
+        } else {
+            winnerName = hero.getName();
+            looserName = getEnemy().getName();
+        }
+
+        menu.printEndFight(winnerName,looserName);
+
+
     }
 
 }

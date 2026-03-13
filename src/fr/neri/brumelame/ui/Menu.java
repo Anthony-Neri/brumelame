@@ -1,6 +1,7 @@
 package fr.neri.brumelame.ui;
 
 import fr.neri.brumelame.domain.character.Hero;
+import fr.neri.brumelame.domain.enemy.Enemy;
 import fr.neri.brumelame.domain.equipment.ConsumableEquipment;
 import fr.neri.brumelame.domain.equipment.DefensiveEquipment;
 import fr.neri.brumelame.domain.equipment.Equipment;
@@ -185,4 +186,37 @@ public class Menu {
     public void printInteractCell(StringBuilder string) {
         System.out.print(string);
     }
+
+
+    public void printStartFight(String enemyName, String  heroName){
+        System.out.println();
+        System.out.println("╔══════════════════════════════════════╗");
+        System.out.println("║            DÉBUT DU COMBAT           ║");
+        System.out.println("╠══════════════════════════════════════╣");
+        System.out.printf("║ Héro   : %-27s ║%n", heroName);
+        System.out.printf("║ Ennemi : %-27s ║%n", enemyName);
+        System.out.println("╚══════════════════════════════════════╝");
+        System.out.println();
+    }
+    public void printTurnFight(int attackerDamage, int victimHealth, int round, String attackerName, String  victimName ) {
+        System.out.println();
+        System.out.println("──────────── Tour " + round + " ────────────");
+        System.out.println();
+        System.out.println(attackerName + "  inflige " + attackerDamage + " dégâts à " + victimName);
+        System.out.println();
+        System.out.println(victimName + " : " + Math.max(victimHealth, 0) + " PV restants.");
+        System.out.println();
+    }
+
+    public  void printEndFight(String winnerName, String looserName){
+        System.out.println("══════════════════════════════════════");
+        System.out.println(winnerName + " à vaincu " + looserName + " !");
+        System.out.println("══════════════════════════════════════");
+    }
+    public void printMessage(String message){
+        System.out.println();
+        System.out.println(message);
+        System.out.println();
+    }
+
 }

@@ -1,6 +1,7 @@
 package fr.neri.brumelame.game.cell;
 
 import fr.neri.brumelame.domain.character.Hero;
+import fr.neri.brumelame.ui.Menu;
 
 public class EmptyCell extends Cell {
 
@@ -14,19 +15,21 @@ public class EmptyCell extends Cell {
     }
 
     @Override
-    public StringBuilder interact(Hero hero) {
+    public void interact(Hero hero, Menu menu) {
 
-        StringBuilder message = new StringBuilder();
+        String message = "";
 
         if (this.number == 0){
-            message.append("Vous êtes sur la case de départ.");
+            message += "Vous êtes sur la case de départ.";
         }else {
-            message.append("Vous êtes arrivez sur une case vide, vous vous reposez ! ");
+            message += "Vous êtes arrivez sur une case vide, vous vous reposez ! ";
             if (hero.getHealth() < hero.getMaxHealth()) {
                 hero.getHeal(1);
-                message.append("Et recouvrez un point de vie !");
+                message += "Et recouvrez un point de vie !";
             }
         }
-        return message ;
+
+        menu.printMessage(message);
+
     }
 }

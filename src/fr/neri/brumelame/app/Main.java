@@ -35,7 +35,7 @@ public class Main {
 
             Game game = new Game(
                     new Menu(),
-                    new Dice(1, 6),
+                    new Dice(1,1),
                     board,
                     heroCreationService
             );
