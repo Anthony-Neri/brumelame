@@ -1,5 +1,7 @@
 package fr.neri.brumelame.domain.equipment;
 
+import java.util.List;
+
 public abstract class Equipment {
     private int id;
     private String type;
@@ -14,7 +16,21 @@ public abstract class Equipment {
         this.category = category;
         this.description = description;
         this.bonus = bonus;
+
+        if (type == null || !getValidTypes().contains(type.toUpperCase())) {
+            throw new IllegalArgumentException(
+                    "Invalid type: " + type + ". Must be one of: " + getValidTypes()
+            );
+        }
+
+        if (category == null || !getValidCategories().contains(category.toUpperCase())) {
+            throw new IllegalArgumentException(
+                    "Invalid category: " + category + ". Must be one of: " + getValidCategories()
+            );
+        }
     }
+    protected abstract List<String> getValidTypes();
+    protected abstract List<String> getValidCategories();
 
     public String getType() {
         return type;
