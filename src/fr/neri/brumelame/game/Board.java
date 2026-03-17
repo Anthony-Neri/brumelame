@@ -93,7 +93,7 @@ public class Board {
             addEnemyCell(1, numberCell);
         }
         for (int numberCell : GOBELIN_CELLS) {
-            addEnemyCell(1, numberCell);
+            addEnemyCell(2, numberCell);
         }
 
         for (int numberCell : OFF_1_CELLS) {
@@ -109,7 +109,7 @@ public class Board {
             addEquipmentCell(1, heroClasse, "CONSUMABLE", numberCell);
         }
         for (int numberCell : CON_2_CELLS) {
-            addEquipmentCell(1, heroClasse, "CONSUMABLE", numberCell);
+            addEquipmentCell(2, heroClasse, "CONSUMABLE", numberCell);
         }
     }
 

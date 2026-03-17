@@ -1,9 +1,6 @@
 package fr.neri.brumelame.dao;
 
-import fr.neri.brumelame.domain.equipment.ConsumableEquipment;
-import fr.neri.brumelame.domain.equipment.DefensiveEquipment;
-import fr.neri.brumelame.domain.equipment.Equipment;
-import fr.neri.brumelame.domain.equipment.OffensiveEquipment;
+import fr.neri.brumelame.domain.equipment.*;
 import fr.neri.brumelame.db.DatabaseConnection;
 
 import java.sql.PreparedStatement;
@@ -85,11 +82,25 @@ public class EquipmentDAO extends DAO<Equipment> {
         String description = rs.getString("description");
         int bonus = rs.getInt("bonus");
 
-        Equipment equipment;
+        Equipment equipment = null;
         switch (type) {
-            case "ATTACK" -> equipment = new OffensiveEquipment(type, name, category, description, bonus);
-            case "DEFENSE" -> equipment = new DefensiveEquipment(type, name, category, description, bonus);
-            case "CONSUMABLE" -> equipment = new ConsumableEquipment(type, name, category, description, bonus);
+            case "ATTACK" -> {
+                switch (category){
+                    case "WEPON" -> equipment = new Weapon(type, name, category, description, bonus);
+                    case "SPELL" -> equipment = new Spell(type, name, category, description, bonus);
+                }
+            }
+            case "DEFENSE" ->{
+                switch (category){
+                    case "WEPON" -> equipment = new Shield(type, name, category, description, bonus);
+                    case "SPELL" -> equipment = new Barrier(type, name, category, description, bonus);
+                }
+            }
+            case "CONSUMABLE" -> {
+                switch (category){
+                    case "POTION" -> equipment = new Potion(type, name, category, description, bonus);
+                }
+            }
             default -> {
                 return null;
             }
