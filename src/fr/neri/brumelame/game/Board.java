@@ -32,9 +32,9 @@ public class Board {
     private static final List<Integer> WIZARD_CELLS = Arrays.asList(10, 20, 25, 32, 35, 36, 37, 40, 44, 47, 57, 58, 60, 8);
     private static final List<Integer> GOBELIN_CELLS = Arrays.asList(3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 49);
 
-    private static final List<Integer> OFF_1_CELLS = Arrays.asList(2, 38, 1, 4, 23);
+    private static final List<Integer> OFF_1_CELLS = Arrays.asList(1, 38, 4, 23);
     private static final List<Integer> OFF_2_CELLS = Arrays.asList(19, 26, 42, 53, 48);
-    private static final List<Integer> DEF_1_CELLS = Arrays.asList(5, 22, 17, 61);
+    private static final List<Integer> DEF_1_CELLS = Arrays.asList(2,5, 22, 17, 61);
     private static final List<Integer> CON_1_CELLS = Arrays.asList(7, 13, 31, 33, 39, 43);
     private static final List<Integer> CON_2_CELLS = Arrays.asList(28, 41);
 

@@ -86,13 +86,13 @@ public class EquipmentDAO extends DAO<Equipment> {
         switch (type) {
             case "ATTACK" -> {
                 switch (category){
-                    case "WEPON" -> equipment = new Weapon(type, name, category, description, bonus);
+                    case "WEAPON" -> equipment = new Weapon(type, name, category, description, bonus);
                     case "SPELL" -> equipment = new Spell(type, name, category, description, bonus);
                 }
             }
             case "DEFENSE" ->{
                 switch (category){
-                    case "WEPON" -> equipment = new Shield(type, name, category, description, bonus);
+                    case "WEAPON" -> equipment = new Shield(type, name, category, description, bonus);
                     case "SPELL" -> equipment = new Barrier(type, name, category, description, bonus);
                 }
             }

@@ -32,9 +32,9 @@ public class EquipmentCell extends Cell{
         String action = "Vous vous équipez de ";
         if (choice == 1) {
             if (this.equipment instanceof OffensiveEquipment ) {
-                hero.setOffEquip((OffensiveEquipment) this.equipment);
+                hero.equipOffEquip((OffensiveEquipment) this.equipment);
             } else if (this.equipment instanceof DefensiveEquipment ) {
-                hero.setDefEquip((DefensiveEquipment) this.equipment);
+                hero.equipDefEquip((DefensiveEquipment) this.equipment);
             } else if (this.equipment instanceof ConsumableEquipment) {
 
                 hero.getHeal(this.equipment.getBonus());

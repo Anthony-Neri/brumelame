@@ -3,6 +3,8 @@ package fr.neri.brumelame.domain.character;
 import fr.neri.brumelame.domain.equipment.DefensiveEquipment;
 import fr.neri.brumelame.domain.equipment.OffensiveEquipment;
 
+import java.util.List;
+
 /**
  * Représente un personnage du jeu.
  * <p>
@@ -24,7 +26,7 @@ public abstract class Hero {
     /** Équipement offensif actuellement porté. */
     private OffensiveEquipment offEquip;
     /** Équipement défensif actuellement porté. */
-    private DefensiveEquipment defEquip;
+    private DefensiveEquipment defEquip = null;
     /** ID de la cellule. */
     private int cellId;
 
@@ -44,10 +46,30 @@ public abstract class Hero {
         this.maxHealth = health;
         this.attack = attack;
         this.offEquip = offEquip;
-        this.defEquip = null;
+
+        if (offEquip == null || !getValidClassOffEquip().contains(offEquip.getClass().getSimpleName().toUpperCase())) {
+            throw new IllegalArgumentException(
+                    "Invalid Classe : " + offEquip.getClass().getSimpleName() + "  Must be one of: " + getValidClassOffEquip()
+            );
+        }
+
     }
+    public Hero ( String name, int health, int attack, OffensiveEquipment offEquip, DefensiveEquipment defEquip) {
+        this(name, health, attack, offEquip);
+        this.defEquip = defEquip;
+
+        if (defEquip != null && !getValidClassOffEquip().contains(defEquip.getClass().getSimpleName().toUpperCase())) {
+            throw new IllegalArgumentException(
+                    "Invalid Classe : " + defEquip.getClass().getSimpleName() + "  Must be one of: " + getValidClassDefEquip()
+            );
+        }
+
+    }
+
     public Hero(){}
 
+    protected abstract List<String> getValidClassOffEquip();
+    protected abstract List<String> getValidClassDefEquip();
     // GUETTERS et SETTERS
     
     public int getId() {
@@ -95,6 +117,7 @@ public abstract class Hero {
     }
 
     public void setOffEquip(OffensiveEquipment offEquip) {
+
         this.offEquip = offEquip;
     }
 
@@ -130,6 +153,26 @@ public abstract class Hero {
     public void getHeal (int heal){
         this.health += heal;
         if (this.health > this.maxHealth) this.health = this.maxHealth;
+    }
+
+    public void equipOffEquip(OffensiveEquipment offEquip){
+        if (offEquip == null || !getValidClassOffEquip().contains(offEquip.getClass().getSimpleName().toUpperCase())) {
+            throw new IllegalArgumentException(
+                    "Invalid Classe : " + offEquip.getClass().getSimpleName() + "  Must be one of: " + getValidClassOffEquip()
+            );
+        }
+
+        setOffEquip(offEquip);
+    }
+
+    public void equipDefEquip(DefensiveEquipment defEquip){
+        if (defEquip == null || !getValidClassDefEquip().contains(defEquip.getClass().getSimpleName().toUpperCase())) {
+            throw new IllegalArgumentException(
+                    "Invalid Classe : " + defEquip.getClass().getSimpleName() + "  Must be one of: " + getValidClassDefEquip()
+            );
+        }
+
+        setDefEquip(defEquip);
     }
 
     /**
