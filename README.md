@@ -1,247 +1,179 @@
 # Brumelame
 
-Un jeu de rôle en ligne de commande développé en Java.
+Brumelame est un jeu de rôle en ligne de commande développé en Java. Le joueur crée un héros, avance sur un plateau de 64 cases, rencontre des ennemis, récupère des équipements et tente d’atteindre la dernière case en restant en vie.
+
+Le projet utilise une base MySQL/MariaDB pour initialiser les données du jeu : classes de héros, ennemis, équipements, plateau, cases et héros créés.
+
+## Fonctionnalités
+
+- Création d’un héros avec choix de classe : **Warrior** ou **Wizard**.
+- Chargement des caractéristiques de classe depuis la base de données.
+- Équipement initial automatique selon la classe du héros.
+- Plateau de 64 cases généré en base au lancement d’une partie.
+- Cases vides, cases ennemis et cases équipements.
+- Combats au tour par tour contre des ennemis.
+- Équipements offensifs, défensifs et consommables.
+- Potions de soin et récupération de vie sur certaines cases vides.
+- Interface entièrement en ligne de commande.
+
+## Stack technique
+
+- Java 17+ recommandé.
+- JDBC.
+- MySQL Connector/J.
+- MySQL ou MariaDB.
+- Docker Compose pour lancer la base en local.
 
 ## Structure du projet
 
-```
-src/
-├── fr/neri/brumelame/
-│   ├── app/
-│   │   └── Main.java
-│   ├── domain/
-│   │   ├── hero/
-│   │   │   ├── Character.java
-│   │   │   ├── Warrior.java
-│   │   │   └── Wizard.java
-│   │   └── equipment/
-│   │       ├── DefensiveEquipment.java
-│   │       ├── OffensiveEquipment.java
-│   │       ├── Potion.java
-│   │       ├── Shield.java
-│   │       ├── Spell.java
-│   │       └── Weapon.java
-│   ├── game/
-│   │   ├── Board.java
-│   │   ├── Dice.java
-│   │   ├── Game.java
-│   │   └── cell/
-│   │       ├── Bonus.java
-│   │       ├── Cell.java
-│   │       ├── EmptyCell.java
-│   │       ├── Enemy.java
-│   │       └── WeaponCell.java
-│   └── ui/
-│       └── Menu.java
+```text
+.
+├── README.md
+├── docker-compose.example.yml
+├── init.sql
+└── src/
+    ├── resources/
+    │   └── db.properties.example
+    └── fr/neri/brumelame/
+        ├── app/
+        │   └── Main.java
+        ├── dao/
+        │   ├── BoardDAO.java
+        │   ├── CellDAO.java
+        │   ├── DAO.java
+        │   ├── EnemyDAO.java
+        │   ├── EquipmentDAO.java
+        │   ├── HeroClassesDAO.java
+        │   └── HeroDAO.java
+        ├── db/
+        │   └── DatabaseConnection.java
+        ├── domain/
+        │   ├── character/
+        │   │   ├── Hero.java
+        │   │   ├── HeroClasse.java
+        │   │   ├── Warrior.java
+        │   │   └── Wizard.java
+        │   ├── enemy/
+        │   │   └── Enemy.java
+        │   └── equipment/
+        │       ├── Barrier.java
+        │       ├── ConsumableEquipment.java
+        │       ├── DefensiveEquipment.java
+        │       ├── Equipment.java
+        │       ├── OffensiveEquipment.java
+        │       ├── Potion.java
+        │       ├── Shield.java
+        │       ├── Spell.java
+        │       └── Weapon.java
+        ├── exception/
+        │   ├── BoardInitializationException.java
+        │   └── HeroInitializationException.java
+        ├── game/
+        │   ├── Board.java
+        │   ├── Dice.java
+        │   ├── Game.java
+        │   └── cell/
+        │       ├── Cell.java
+        │       ├── EmptyCell.java
+        │       ├── EnemyCell.java
+        │       └── EquipmentCell.java
+        ├── service/
+        │   └── HeroCreationService.java
+        └── ui/
+            └── Menu.java
 ```
 
-## Diagramme de classes
+## Architecture
 
 ```mermaid
-classDiagram
+flowchart TD
+    Main[app/Main] --> Game[game/Game]
+    Main --> Menu[ui/Menu]
+    Main --> Board[game/Board]
+    Main --> HeroCreationService[service/HeroCreationService]
 
-    class Main {
-        +main()$ void
-    }
+    Game --> Board
+    Game --> Dice[game/Dice]
+    Game --> Menu
+    Game --> HeroCreationService
 
-    class Game {
-        -FINAL_CELL: int$
-        -menu: Menu
-        -hero: Character
-        -dice: Dice
-        -board: Board
-        +Game()
-        +home() void
-        +startGame() void
-        +mainMenu() void 
-        +characterMenu() void
-        +createCharacter(String type, String name) Character
-        +play() void
-        -moveCharacter() void
-    }
+    HeroCreationService --> HeroDAO[dao/HeroDAO]
+    HeroCreationService --> HeroClassesDAO[dao/HeroClassesDAO]
+    HeroCreationService --> EquipmentDAO[dao/EquipmentDAO]
 
-    class Board {
-        -cells: Cell[]
-        +Board()
-        +getCell(int index) Cell
-    }
+    Board --> BoardDAO[dao/BoardDAO]
+    Board --> CellDAO[dao/CellDAO]
+    Board --> EnemyDAO[dao/EnemyDAO]
+    Board --> EquipmentDAO
 
-    class Cell {
-        <<abstract>>
-        -name: String
-        +Cell(String name)
-        +getName() String
-    }
+    DAO[dao/DAO] --> DatabaseConnection[db/DatabaseConnection]
+    DatabaseConnection --> DB[(MySQL/MariaDB)]
 
-    class EmptyCell {
-        +EmptyCell()
-    }
+    Board --> Cell[game/cell]
+    Cell --> EmptyCell
+    Cell --> EnemyCell
+    Cell --> EquipmentCell
 
-    class Bonus {
-        +Bonus()
-    }
+    Hero[domain/character/Hero] --> Equipment[domain/equipment]
+    EnemyCell --> Enemy[domain/enemy/Enemy]
+```
 
-    class Enemy {
-        +Enemy()
-    }
+## Prérequis
 
-    class WeaponCell {
-        +WeaponCell()
-    }
+- JDK 17 ou plus récent.
+- Docker et Docker Compose, si vous utilisez la base fournie en local.
+- MySQL Connector/J disponible localement pour lancer l’application sans Maven/Gradle.
 
-    class Character {
-        <<abstract>>
-        -type: String
-        -name: String
-        -health: int
-        -attack: int
-        -equipement: OffensiveEquipment
-        -cell: int
-        +Character(String type, String name, int health, int attack, OffensiveEquipment equipement)
-        +getName() String
-        +getHealth() int
-        +getAttack() int
-        +getEquipement() OffensiveEquipment
-        +getCell() int
-        +setName(String name) void
-        +setHealth(int health) void
-        +setAttack(int attack) void
-        +setEquipement(OffensiveEquipment equipement) void
-        +setCell(int cell) void
-        +toString() String
-    }
+Exemple d’emplacement pour le driver JDBC :
 
-    class Warrior {
-        +Warrior(String name)
-    }
-
-    class Wizard {
-        +Wizard(String name)
-    }
-
-    class OffensiveEquipment {
-        <<abstract>>
-        -type: String
-        -name: String
-        -bonusAttack: int
-        +OffensiveEquipment(String name, String type, int attack)
-        +getName() String
-        +getType() String
-        +getBonusAttack() int
-        +toString() String
-    }
-
-    class Weapon {
-        +Weapon(String name, String type, int bonusAttack)
-    }
-
-    class Spell {
-        +Spell(String name, String type, int bonusAttack)
-    }
-
-    class DefensiveEquipment {
-        <<abstract>>
-        -type: String
-        -name: String
-        -bonus: int
-        +DefensiveEquipment(String name, String type, int defense)
-        +getName() String
-        +getType() String
-        +getBonus() int
-        +toString() String
-    }
-
-    class Shield {
-        +Shield(String name, int bonus)
-    }
-
-    class Potion {
-        +Potion(String name, int bonus)
-    }
-
-    class Menu {
-        -input: Scanner
-        +Menu()
-        +askMainStartChoice() int
-        +askMainChoice() int
-        +askCharacterType() int
-        +askCharacterMenuChoice() int
-        +askNameCharacter() String
-        +askAction(int characterPosition) int
-        +printCharacter(Character hero) void
-        +end() void
-        +quit() void
-        -askInt(String message, int minValue, int maxValue) int
-        -askString(String message) String
-    }
-
-    class Dice {
-        -minValue: int
-        -maxValue: int
-        +Dice(int minValue, int maxValue)
-        +roll() int
-    }
-
-    Main ..> Game : uses
-    Game --> Menu : has
-    Game --> Character : has
-    Game --> Dice : has
-    Game --> Board : has
-    Board --> Cell : contains
-    Cell <|-- EmptyCell : extends
-    Cell <|-- Bonus : extends
-    Cell <|-- Enemy : extends
-    Cell <|-- WeaponCell : extends
-    Character <|-- Warrior : extends
-    Character <|-- Wizard : extends
-    Character --> OffensiveEquipment : has
-    OffensiveEquipment <|-- Weapon : extends
-    OffensiveEquipment <|-- Spell : extends
-    DefensiveEquipment <|-- Shield : extends
-    DefensiveEquipment <|-- Potion : extends
-    Warrior ..> Weapon : creates
-    Wizard ..> Spell : creates
+```text
+lib/mysql-connector-j-<version>.jar
 ```
 
 ## Comment jouer
 
-1. Compiler le projet
-2. Exécuter [`Main.java`](src/fr/neri/brumelame/app/Main.java)
-3. Suivre les instructions à l'écran :
-   - Créer un personnage (Sorcier ou Guerrier)
-   - Nommer votre personnage
-   - Commencer le jeu et avancer sur le plateau (64 cases)
-   - Rencontrer des cases spéciales : bonus, ennemis, armes...
+Au lancement, le jeu affiche un menu principal :
 
-## Classes principales
+1. Créer un nouveau personnage.
+2. Choisir une classe : `Wizard` ou `Warrior`.
+3. Donner un nom au héros.
+4. Consulter les caractéristiques du héros ou commencer la partie.
+5. Avancer sur le plateau jusqu’à la dernière case.
 
-### Application
-- [`Main`](src/fr/neri/brumelame/app/Main.java) : Point d'entrée de l'application
+Pendant la partie :
 
-### Personnages (`domain/hero`)
-- [`Character`](src/fr/neri/brumelame/domain/hero/Character.java) : Classe abstraite pour les personnages
-- [`Warrior`](src/fr/neri/brumelame/domain/hero/Warrior.java) : Classe guerrier (10 PV, 5 ATK)
-- [`Wizard`](src/fr/neri/brumelame/domain/hero/Wizard.java) : Classe sorcier (6 PV, 8 ATK)
+- Une case vide peut permettre au héros de récupérer 1 point de vie s’il n’est pas déjà au maximum.
+- Une case équipement propose de récupérer ou d’utiliser l’objet trouvé.
+- Une case ennemi déclenche un combat au tour par tour.
+- La partie est gagnée lorsque le héros atteint la dernière case.
+- La partie est perdue lorsque les points de vie du héros tombent à 0 ou moins.
 
-### Équipements (`domain/equipment`)
-- [`OffensiveEquipment`](src/fr/neri/brumelame/domain/equipment/OffensiveEquipment.java) : Classe abstraite pour les équipements offensifs
-- [`Weapon`](src/fr/neri/brumelame/domain/equipment/Weapon.java) : Arme pour les guerriers
-- [`Spell`](src/fr/neri/brumelame/domain/equipment/Spell.java) : Sort pour les sorciers
-- [`DefensiveEquipment`](src/fr/neri/brumelame/domain/equipment/DefensiveEquipment.java) : Classe abstraite pour les équipements défensifs
-- [`Shield`](src/fr/neri/brumelame/domain/equipment/Shield.java) : Bouclier
-- [`Potion`](src/fr/neri/brumelame/domain/equipment/Potion.java) : Potion de soin
+## Règles et données initiales
 
-### Jeu (`game`)
-- [`Game`](src/fr/neri/brumelame/game/Game.java) : Gère la logique du jeu
-- [`Board`](src/fr/neri/brumelame/game/Board.java) : Représente le plateau de jeu
-- [`Dice`](src/fr/neri/brumelame/game/Dice.java) : Simule un dé pour le déplacement
+Les données de base sont définies dans `init.sql`.
 
-### Cases (`game/cell`)
-- [`Cell`](src/fr/neri/brumelame/game/cell/Cell.java) : Classe abstraite pour les cases du plateau
-- [`EmptyCell`](src/fr/neri/brumelame/game/cell/EmptyCell.java) : Case vide
-- [`Bonus`](src/fr/neri/brumelame/game/cell/Bonus.java) : Case bonus
-- [`Enemy`](src/fr/neri/brumelame/game/cell/Enemy.java) : Case ennemi
-- [`WeaponCell`](src/fr/neri/brumelame/game/cell/WeaponCell.java) : Case arme
+### Classes de héros
 
-### Interface utilisateur (`ui`)
-- [`Menu`](src/fr/neri/brumelame/ui/Menu.java) : Gère l'interface utilisateur en ligne de commande
+| Classe | PV de base | Attaque de base | Équipement offensif |
+|---|---:|---:|---|
+| `WARRIOR` | 10 | 5 | `WEAPON` |
+| `WIZARD` | 6 | 8 | `SPELL` |
+
+### Ennemis
+
+| Ennemi | PV | Attaque |
+|---|---:|---:|
+| `gobelin` | 6 | 1 |
+| `sorcier` | 9 | 2 |
+| `dragon` | 15 | 4 |
+
+### Équipements
+
+| Type | Catégorie | Exemples |
+|---|---|---|
+| `ATTACK` | `WEAPON` | Épée de bois, Épée de fer, Épée en acier |
+| `ATTACK` | `SPELL` | Bâton de marche, Bâton d’éclair de mana, Bâton de boule de feu |
+| `DEFENSE` | `WEAPON` | Bouclier de fer |
+| `DEFENSE` | `SPELL` | Bouclier de mana |
+| `CONSUMABLE` | `POTION` | Petite potion de vie, Grande potion de vie |
+
