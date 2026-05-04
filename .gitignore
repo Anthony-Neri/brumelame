@@ -35,3 +35,6 @@ bin/
 /src/resources/db.properties
 
 docker-compose.yml
+
+.gradle/
+build/

@@ -58,7 +58,7 @@ public abstract class Hero {
         this(name, health, attack, offEquip);
         this.defEquip = defEquip;
 
-        if (defEquip != null && !getValidClassOffEquip().contains(defEquip.getClass().getSimpleName().toUpperCase())) {
+        if (defEquip != null && !getValidClassDefEquip().contains(defEquip.getClass().getSimpleName().toUpperCase())) {
             throw new IllegalArgumentException(
                     "Invalid Classe : " + defEquip.getClass().getSimpleName() + "  Must be one of: " + getValidClassDefEquip()
             );
@@ -145,7 +145,7 @@ public abstract class Hero {
     }
     public void receivedDamage(int damage){
         if (this.defEquip != null){
-            damage = Math.max(damage - defEquip.getBonus() , 0);
+            damage = Math.max(damage - getDefense() , 0);
         }
 
         this.health -= damage;
@@ -173,6 +173,14 @@ public abstract class Hero {
         }
 
         setDefEquip(defEquip);
+    }
+    public int getDefense(){
+        if (this.defEquip != null){
+           return  getDefEquip().getBonus();
+        }else {
+            return 0;
+        }
+
     }
 
     /**
