@@ -151,10 +151,20 @@ public class HeroDAO extends DAO<Hero> {
                 int health = rs.getInt("health");
                 int attack = rs.getInt("attack");
 
+
+                EquipmentDAO equipmentDAO = new EquipmentDAO();
+
+                int offEquipId = rs.getInt("offensive_equipment_id");
+                OffensiveEquipment offensiveEquipment = null;
+                if (!rs.wasNull()) {
+                     offensiveEquipment =  (OffensiveEquipment) equipmentDAO.find(offEquipId);
+                    
+                }
+
                 Hero hero;
                 switch (heroClassName) {
-                    case "WARRIOR" -> hero = new Warrior(name, health, attack);
-                    case "WIZARD" -> hero = new Wizard(name, health, attack);
+                    case "WARRIOR" -> hero = new Warrior(name, health, attack,offensiveEquipment);
+                    case "WIZARD" -> hero = new Wizard(name, health, attack, offensiveEquipment);
                     default -> {
                         return null;
                     }
@@ -167,12 +177,7 @@ public class HeroDAO extends DAO<Hero> {
                     hero.setCellId(cellId);
                 }
 
-                EquipmentDAO equipmentDAO = new EquipmentDAO();
 
-                int offEquipId = rs.getInt("offensive_equipment_id");
-                if (!rs.wasNull()) {
-                    hero.setOffEquip((OffensiveEquipment) equipmentDAO.find(offEquipId));
-                }
 
                 int defEquipId = rs.getInt("defensive_equipment_id");
                 if (!rs.wasNull()) {
